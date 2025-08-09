@@ -1,0 +1,836 @@
+component: PostList mounted
+	option: nativeID = y8dy1ao4xiyjbchjtzz5u8midr
+component: PostDraft mounted
+	option: scrollViewNativeID = y8dy1ao4xiyjbchjtzz5u8midr
+component: PostList mounted
+	option: nativeID = v00408cq4kq846t46nj2hsn6ps
+component: ThreadPostList mounted
+	option: nativeID = v00408cq4kq846t46nj2hsn6ps
+component: PostDraft mounted
+	option: scrollViewNativeID = v00408cq4kq846t46nj2hsn6ps
+component: Thread mounted
+	option: rootId = v00408cq4kq846t46nj2hsn6ps
+component: PostList mounted
+	option: nativeID = Permalink
+component: PostList optionChanged
+	option: from nativeID = y8dy1ao4xiyjbchjtzz5u8midr to nativeID = 3my3ykfpffnhmp7zro8s3uurky
+component: PostDraft optionChanged
+	option: from scrollViewNativeID = y8dy1ao4xiyjbchjtzz5u8midr to scrollViewNativeID = 3my3ykfpffnhmp7zro8s3uurky
+component: PostList mounted
+	option: nativeID = v0040pcq4koadnoggcdve6ugkk
+component: ThreadPostList mounted
+	option: nativeID = v0040pcq4koadnoggcdve6ugkk
+component: PostDraft mounted
+	option: scrollViewNativeID = v0040pcq4koadnoggcdve6ugkk
+component: Thread mounted
+	option: rootId = v0040pcq4koadnoggcdve6ugkk
+component: Thread unmounted
+	option: rootId = v0040pcq4koadnoggcdve6ugkk
+component: ThreadPostList unmounted
+	option: nativeID = v0040pcq4koadnoggcdve6ugkk
+component: PostList unmounted
+	option: nativeID = v0040pcq4koadnoggcdve6ugkk
+component: PostDraft unmounted
+	option: scrollViewNativeID = v0040pcq4koadnoggcdve6ugkk
+component: PostList unmounted
+	option: nativeID = Permalink
+component: Thread unmounted
+	option: rootId = v00408cq4kq846t46nj2hsn6ps
+component: ThreadPostList unmounted
+	option: nativeID = v00408cq4kq846t46nj2hsn6ps
+component: PostList unmounted
+	option: nativeID = v00408cq4kq846t46nj2hsn6ps
+component: PostDraft unmounted
+	option: scrollViewNativeID = v00408cq4kq846t46nj2hsn6ps
+component: PostList unmounted
+	option: nativeID = y8dy1ao4xiyjbchjtzz5u8midr
+component: PostDraft unmounted
+	option: scrollViewNativeID = y8dy1ao4xiyjbchjtzz5u8midr
+component: PostList mounted
+	option: nativeID = y8dy1ao4xiyjbchjtzz5u8midr
+component: PostDraft mounted
+	option: scrollViewNativeID = y8dy1ao4xiyjbchjtzz5u8midr
+component: PostList mounted
+	option: nativeID = v00408cq4kq846t46nj2hsn6ps
+component: ThreadPostList mounted
+	option: nativeID = v00408cq4kq846t46nj2hsn6ps
+component: PostDraft mounted
+	option: scrollViewNativeID = v00408cq4kq846t46nj2hsn6ps
+component: Thread mounted
+	option: rootId = v00408cq4kq846t46nj2hsn6ps
+component: PostList mounted
+	option: nativeID = Permalink
+component: PostList optionChanged
+	option: from nativeID = y8dy1ao4xiyjbchjtzz5u8midr to nativeID = 3my3ykfpffnhmp7zro8s3uurky
+component: PostDraft optionChanged
+	option: from scrollViewNativeID = y8dy1ao4xiyjbchjtzz5u8midr to scrollViewNativeID = 3my3ykfpffnhmp7zro8s3uurky
+component: PostList mounted
+	option: nativeID = v0040pcq4koadnoggcdve6ugkk
+component: ThreadPostList mounted
+	option: nativeID = v0040pcq4koadnoggcdve6ugkk
+component: PostDraft mounted
+	option: scrollViewNativeID = v0040pcq4koadnoggcdve6ugkk
+component: Thread mounted
+	option: rootId = v0040pcq4koadnoggcdve6ugkk
+component: Thread unmounted
+	option: rootId = v0040pcq4koadnoggcdve6ugkk
+component: ThreadPostList unmounted
+	option: nativeID = v0040pcq4koadnoggcdve6ugkk
+component: PostList unmounted
+	option: nativeID = v0040pcq4koadnoggcdve6ugkk
+component: PostDraft unmounted
+	option: scrollViewNativeID = v0040pcq4koadnoggcdve6ugkk
+component: PostList unmounted
+	option: nativeID = Permalink
+component: Thread unmounted
+	option: rootId = v00408cq4kq846t46nj2hsn6ps
+component: ThreadPostList unmounted
+	option: nativeID = v00408cq4kq846t46nj2hsn6ps
+component: PostList unmounted
+	option: nativeID = v00408cq4kq846t46nj2hsn6ps
+component: PostDraft unmounted
+	option: scrollViewNativeID = v00408cq4kq846t46nj2hsn6ps
+component: PostList mounted
+	option: nativeID = v00408cq4kq846t46nj2hsn6ps
+component: ThreadPostList mounted
+	option: nativeID = v00408cq4kq846t46nj2hsn6ps
+component: PostDraft mounted
+	option: scrollViewNativeID = v00408cq4kq846t46nj2hsn6ps
+component: Thread mounted
+	option: rootId = v00408cq4kq846t46nj2hsn6ps
+component: Thread unmounted
+	option: rootId = v00408cq4kq846t46nj2hsn6ps
+component: ThreadPostList unmounted
+	option: nativeID = v00408cq4kq846t46nj2hsn6ps
+component: PostList unmounted
+	option: nativeID = v00408cq4kq846t46nj2hsn6ps
+component: PostDraft unmounted
+	option: scrollViewNativeID = v00408cq4kq846t46nj2hsn6ps
+component: PostList unmounted
+	option: nativeID = y8dy1ao4xiyjbchjtzz5u8midr
+component: PostDraft unmounted
+	option: scrollViewNativeID = y8dy1ao4xiyjbchjtzz5u8midr
+component: PostList mounted
+	option: nativeID = y8dy1ao4xiyjbchjtzz5u8midr
+component: PostDraft mounted
+	option: scrollViewNativeID = y8dy1ao4xiyjbchjtzz5u8midr
+component: PostList mounted
+	option: nativeID = v00408cq4kq846t46nj2hsn6ps
+component: ThreadPostList mounted
+	option: nativeID = v00408cq4kq846t46nj2hsn6ps
+component: PostDraft mounted
+	option: scrollViewNativeID = v00408cq4kq846t46nj2hsn6ps
+component: Thread mounted
+	option: rootId = v00408cq4kq846t46nj2hsn6ps
+component: PostList mounted
+	option: nativeID = Permalink
+component: PostList optionChanged
+	option: from nativeID = y8dy1ao4xiyjbchjtzz5u8midr to nativeID = 3my3ykfpffnhmp7zro8s3uurky
+component: PostDraft optionChanged
+	option: from scrollViewNativeID = y8dy1ao4xiyjbchjtzz5u8midr to scrollViewNativeID = 3my3ykfpffnhmp7zro8s3uurky
+component: PostList mounted
+	option: nativeID = v0040pcq4koadnoggcdve6ugkk
+component: ThreadPostList mounted
+	option: nativeID = v0040pcq4koadnoggcdve6ugkk
+component: PostDraft mounted
+	option: scrollViewNativeID = v0040pcq4koadnoggcdve6ugkk
+component: Thread mounted
+	option: rootId = v0040pcq4koadnoggcdve6ugkk
+component: Thread unmounted
+	option: rootId = v0040pcq4koadnoggcdve6ugkk
+component: ThreadPostList unmounted
+	option: nativeID = v0040pcq4koadnoggcdve6ugkk
+component: PostList unmounted
+	option: nativeID = v0040pcq4koadnoggcdve6ugkk
+component: PostDraft unmounted
+	option: scrollViewNativeID = v0040pcq4koadnoggcdve6ugkk
+component: PostList unmounted
+	option: nativeID = Permalink
+component: Thread unmounted
+	option: rootId = v00408cq4kq846t46nj2hsn6ps
+component: ThreadPostList unmounted
+	option: nativeID = v00408cq4kq846t46nj2hsn6ps
+component: PostList unmounted
+	option: nativeID = v00408cq4kq846t46nj2hsn6ps
+component: PostDraft unmounted
+	option: scrollViewNativeID = v00408cq4kq846t46nj2hsn6ps
+component: PostList unmounted
+	option: nativeID = y8dy1ao4xiyjbchjtzz5u8midr
+component: PostDraft unmounted
+	option: scrollViewNativeID = y8dy1ao4xiyjbchjtzz5u8midr
+component: PostList mounted
+	option: nativeID = y8dy1ao4xiyjbchjtzz5u8midr
+component: PostDraft mounted
+	option: scrollViewNativeID = y8dy1ao4xiyjbchjtzz5u8midr
+component: PostList mounted
+	option: nativeID = v00408cq4kq846t46nj2hsn6ps
+component: ThreadPostList mounted
+	option: nativeID = v00408cq4kq846t46nj2hsn6ps
+component: PostDraft mounted
+	option: scrollViewNativeID = v00408cq4kq846t46nj2hsn6ps
+component: Thread mounted
+	option: rootId = v00408cq4kq846t46nj2hsn6ps
+COMMAND COMPLETE: Channel
+SCREENS: [Home, Channel]
+component: PostList mounted
+	option: nativeID = Permalink
+COMMAND COMPLETE: Channel
+SCREENS: [Home, Channel]
+component: PostList optionChanged
+	option: from nativeID = y8dy1ao4xiyjbchjtzz5u8midr to nativeID = 3my3ykfpffnhmp7zro8s3uurky
+component: PostDraft optionChanged
+	option: from scrollViewNativeID = y8dy1ao4xiyjbchjtzz5u8midr to scrollViewNativeID = 3my3ykfpffnhmp7zro8s3uurky
+COMMAND COMPLETE: Channel
+SCREENS: [Home, Channel]
+component: PostList mounted
+	option: nativeID = v0040pcq4kp8iq855sh06nn13v
+component: ThreadPostList mounted
+	option: nativeID = v0040pcq4kp8iq855sh06nn13v
+component: PostDraft mounted
+	option: scrollViewNativeID = v0040pcq4kp8iq855sh06nn13v
+component: Thread mounted
+	option: rootId = v0040pcq4kp8iq855sh06nn13v
+COMMAND COMPLETE: Channel
+SCREENS: [Home, Channel]
+component: Thread unmounted
+	option: rootId = v0040pcq4kp8iq855sh06nn13v
+component: ThreadPostList unmounted
+	option: nativeID = v0040pcq4kp8iq855sh06nn13v
+component: PostList unmounted
+	option: nativeID = v0040pcq4kp8iq855sh06nn13v
+component: PostDraft unmounted
+	option: scrollViewNativeID = v0040pcq4kp8iq855sh06nn13v
+COMMAND COMPLETE: Channel
+SCREENS: [Home, Channel]
+component: PostList unmounted
+	option: nativeID = Permalink
+COMMAND COMPLETE: Channel
+SCREENS: [Home, Channel]
+component: Thread unmounted
+	option: rootId = v00408cq4kq846t46nj2hsn6ps
+component: ThreadPostList unmounted
+	option: nativeID = v00408cq4kq846t46nj2hsn6ps
+component: PostList unmounted
+	option: nativeID = v00408cq4kq846t46nj2hsn6ps
+component: PostDraft unmounted
+	option: scrollViewNativeID = v00408cq4kq846t46nj2hsn6ps
+component: PostList mounted
+	option: nativeID = y8dy1ao4xiyjbchjtzz5u8midr
+component: PostDraft mounted
+	option: scrollViewNativeID = y8dy1ao4xiyjbchjtzz5u8midr
+component: PostList mounted
+	option: nativeID = v00408cq4kq846t46nj2hsn6ps
+component: ThreadPostList mounted
+	option: nativeID = v00408cq4kq846t46nj2hsn6ps
+component: PostDraft mounted
+	option: scrollViewNativeID = v00408cq4kq846t46nj2hsn6ps
+component: Thread mounted
+	option: rootId = v00408cq4kq846t46nj2hsn6ps
+COMMAND COMPLETE: Channel
+SCREENS: [Home, Channel]
+COMMAND COMPLETE: Thread
+SCREENS: [Thread]
+component: PostList mounted
+	option: nativeID = Permalink
+COMMAND COMPLETE: Channel
+SCREENS: [Home, Channel]
+COMMAND COMPLETE: Thread
+SCREENS: [Thread]
+component: PostList optionChanged
+	option: from nativeID = y8dy1ao4xiyjbchjtzz5u8midr to nativeID = 3my3ykfpffnhmp7zro8s3uurky
+component: PostDraft optionChanged
+	option: from scrollViewNativeID = y8dy1ao4xiyjbchjtzz5u8midr to scrollViewNativeID = 3my3ykfpffnhmp7zro8s3uurky
+COMMAND COMPLETE: Thread
+SCREENS: [Thread]
+COMMAND COMPLETE: Channel
+SCREENS: [Home, Channel]
+component: PostList mounted
+	option: nativeID = v0040pcq4koadnoggcdve6ugkk
+component: ThreadPostList mounted
+	option: nativeID = v0040pcq4koadnoggcdve6ugkk
+component: PostDraft mounted
+	option: scrollViewNativeID = v0040pcq4koadnoggcdve6ugkk
+component: Thread mounted
+	option: rootId = v0040pcq4koadnoggcdve6ugkk
+COMMAND COMPLETE: Thread
+SCREENS: [Thread]
+COMMAND COMPLETE: Channel
+SCREENS: [Home, Channel]
+COMMAND COMPLETE: Thread
+SCREENS: [Thread]
+component: Thread unmounted
+	option: rootId = v0040pcq4koadnoggcdve6ugkk
+component: ThreadPostList unmounted
+	option: nativeID = v0040pcq4koadnoggcdve6ugkk
+component: PostList unmounted
+	option: nativeID = v0040pcq4koadnoggcdve6ugkk
+component: PostDraft unmounted
+	option: scrollViewNativeID = v0040pcq4koadnoggcdve6ugkk
+COMMAND COMPLETE: Thread
+SCREENS: [Thread]
+COMMAND COMPLETE: Channel
+SCREENS: [Home, Channel]
+component: PostList unmounted
+	option: nativeID = Permalink
+COMMAND COMPLETE: Thread
+SCREENS: [Thread]
+COMMAND COMPLETE: Channel
+SCREENS: [Home, Channel]
+component: Thread unmounted
+	option: rootId = v00408cq4kq846t46nj2hsn6ps
+component: ThreadPostList unmounted
+	option: nativeID = v00408cq4kq846t46nj2hsn6ps
+component: PostList unmounted
+	option: nativeID = v00408cq4kq846t46nj2hsn6ps
+component: PostDraft unmounted
+	option: scrollViewNativeID = v00408cq4kq846t46nj2hsn6ps
+component: PostList mounted
+	option: nativeID = y8dy1ao4xiyjbchjtzz5u8midr
+component: PostDraft mounted
+	option: scrollViewNativeID = y8dy1ao4xiyjbchjtzz5u8midr
+component: PostList mounted
+	option: nativeID = v00408cq4ln9gfb8ndgsouv5q1
+component: ThreadPostList mounted
+	option: nativeID = v00408cq4ln9gfb8ndgsouv5q1
+component: PostDraft mounted
+	option: scrollViewNativeID = v00408cq4ln9gfb8ndgsouv5q1
+component: Thread mounted
+	option: rootId = v00408cq4ln9gfb8ndgsouv5q1
+COMMAND COMPLETE: Channel
+SCREENS: [Home, Channel]
+COMMAND COMPLETE: Thread
+SCREENS: [Thread]
+PAUSED: y8dy1ao4xiyjbchjtzz5u8midr
+RESUMED: y8dy1ao4xiyjbchjtzz5u8midr
+PAUSED: y8dy1ao4xiyjbchjtzz5u8midr
+PAUSED: v00408cq4kq846t46nj2hsn6ps
+RESUMED: y8dy1ao4xiyjbchjtzz5u8midr
+RESUMED: v00408cq4kq846t46nj2hsn6ps
+PAUSED: 3my3ykfpffnhmp7zro8s3uurky
+RESUMED: 3my3ykfpffnhmp7zro8s3uurky
+PAUSED: 3my3ykfpffnhmp7zro8s3uurky
+RESUMED: 3my3ykfpffnhmp7zro8s3uurky
+PAUSED: v00408cq4kq846t46nj2hsn6ps
+PAUSED: 3my3ykfpffnhmp7zro8s3uurky
+RESUMED: v00408cq4kq846t46nj2hsn6ps
+RESUMED: 3my3ykfpffnhmp7zro8s3uurky
+PAUSED: v00408cq4kq846t46nj2hsn6ps
+PAUSED: 3my3ykfpffnhmp7zro8s3uurky
+RESUMED: v00408cq4kq846t46nj2hsn6ps
+RESUMED: 3my3ykfpffnhmp7zro8s3uurky
+PAUSED: 3my3ykfpffnhmp7zro8s3uurky
+PAUSED: v00408cq4kq846t46nj2hsn6ps
+RESUMED: 3my3ykfpffnhmp7zro8s3uurky
+PAUSED: y8dy1ao4xiyjbchjtzz5u8midr Thread
+PAUSED: v00408cq4kq846t46nj2hsn6ps Permalink
+RESUMED: v00408cq4kq846t46nj2hsn6ps Thread
+PAUSED: v00408cq4kq846t46nj2hsn6ps Permalink
+RESUMED: 3my3ykfpffnhmp7zro8s3uurky Channel
+NavigationState = [Home]
+NavigationState = [Home]
+NavigationState = [Home]
+NavigationState = [Channel, Home]
+NavigationState = [Channel, Home]
+NavigationState = [Channel, Home]
+NavigationState = [Thread, Channel, Home]
+PAUSED: y8dy1ao4xiyjbchjtzz5u8midr Thread
+NavigationState = [Thread, Channel, Home]
+NavigationState = [Permalink, Thread, Channel, Home]
+PAUSED: v00408cq4kq846t46nj2hsn6ps Permalink
+NavigationState = [Thread, Permalink, Channel, Home]
+RESUMED: v00408cq4kq846t46nj2hsn6ps Thread
+NavigationState = [Thread, Permalink, Channel, Home]
+NavigationState = [Permalink, Channel, Home]
+PAUSED: v00408cq4kq846t46nj2hsn6ps Permalink
+NavigationState = [Channel, Home]
+RESUMED: 3my3ykfpffnhmp7zro8s3uurky Channel
+NavigationState = [Channel, Home]
+NavigationState = [Channel, Home]
+NavigationState = [Home]
+NavigationState = [Channel, Home]
+NavigationState = [Channel, Home]
+NavigationState = [Home]
+NavigationState = [Channel, Home]
+NavigationState = [Channel, Home]
+NavigationState = [Home]
+NavigationState = [Channel, Home]
+NavigationState = [Channel, Home]
+NavigationState = [Home]
+NavigationState = [Channel, Home]
+NavigationState = [Channel, Home]
+NavigationState = [Home]
+NavigationState = [Channel, Home]
+NavigationState = [Thread, Channel, Home]
+PAUSED: y8dy1ao4xiyjbchjtzz5u8midr Thread
+NavigationState = [Thread, Channel, Home]
+NavigationState = [Permalink, Thread, Channel, Home]
+PAUSED: v00408cq4kq846t46nj2hsn6ps Permalink
+NavigationState = [Thread, Permalink, Channel, Home]
+RESUMED: v00408cq4kq846t46nj2hsn6ps Thread
+NavigationState = [Thread, Permalink, Channel, Home]
+NavigationState = [Permalink, Channel, Home]
+PAUSED: v00408cq4kq846t46nj2hsn6ps Permalink
+NavigationState = [Channel, Home]
+RESUMED: 3my3ykfpffnhmp7zro8s3uurky Channel
+NavigationState = [Channel, Home]
+NavigationState = [Channel, Home]
+PARAMS:  {"commandId":"setRoot4","layout":{"root":{"id":"Stack3","type":"Stack","data":{},"children":[{"id":"Home","type":"Component","data":{"name":"Home","options":{"layout":{"componentBackgroundColor":"#ffffff"},"statusBar":{"visible":true,"backgroundColor":"#1e325c"},"topBar":{"visible":false,"height":0,"background":{"color":"#1e325c"},"backButton":{"visible":false,"color":"#ffffff"}}},"passProps":{"launchType":"normal","coldStart":true,"serverUrl":"https://chatzone.o3t.ru"}},"children":[]}]},"modals":[],"overlays":[]}}
+NavigationState = [Home]
+PARAMS:  {"componentId":"Home","options":{"topBar":{"title":{"color":"#dddfe4"},"background":{"color":"#0f1a2e"},"leftButtonColor":"#dddfe4","rightButtonColor":"#dddfe4","backButton":{"color":"#dddfe4"}},"statusBar":{"backgroundColor":"#0f1a2e","style":"light"},"layout":{"componentBackgroundColor":"#0a111f"}}}
+NavigationState = [Home]
+PARAMS:  {"commandId":"dismissAllOverlays5"}
+NavigationState = [Home]
+PARAMS:  {"commandId":"push6","componentId":"Home","layout":{"id":"Channel","type":"Component","data":{"name":"Channel","options":{"layout":{"componentBackgroundColor":"#ffffff"},"popGesture":true,"sideMenu":{"left":{"enabled":false},"right":{"enabled":false}},"statusBar":{"style":"light"},"topBar":{"animate":true,"visible":false,"backButton":{"color":"#ffffff","title":"","testID":"screen.back.button"},"background":{"color":"#1e325c"},"title":{"color":"#ffffff","text":""}}},"passProps":{}},"children":[]}}
+NavigationState = [Channel, Home]
+PARAMS:  {"componentId":"Channel","options":{"topBar":{"title":{"color":"#dddfe4"},"background":{"color":"#0f1a2e"},"leftButtonColor":"#dddfe4","rightButtonColor":"#dddfe4","backButton":{"color":"#dddfe4"}},"statusBar":{"backgroundColor":"#0f1a2e","style":"light"},"layout":{"componentBackgroundColor":"#0a111f"}}}
+NavigationState = [Channel, Home]
+PARAMS:  {"componentId":"Home","options":{"topBar":{"title":{"color":"#dddfe4"},"background":{"color":"#0f1a2e"},"leftButtonColor":"#dddfe4","rightButtonColor":"#dddfe4","backButton":{"color":"#dddfe4"}},"statusBar":{"backgroundColor":"#0f1a2e","style":"light"},"layout":{"componentBackgroundColor":"#0a111f"}}}
+NavigationState = [Channel, Home]
+PARAMS:  {"commandId":"push8","componentId":"Channel","layout":{"id":"Thread","type":"Component","data":{"name":"Thread","options":{"layout":{"componentBackgroundColor":"#0a111f"},"popGesture":true,"sideMenu":{"left":{"enabled":false},"right":{"enabled":false}},"statusBar":{"style":"light"},"topBar":{"animate":true,"visible":true,"backButton":{"color":"#dddfe4","title":"","testID":"screen.back.button"},"background":{"color":"#0f1a2e"},"title":{"color":"#dddfe4","text":"Thread"},"subtitle":{"color":"rgba(221,223,228,0.72)","text":"in firefighters_stg"},"noBorder":true,"scrollEdgeAppearance":{"noBorder":true,"active":true}}},"passProps":{"rootId":"v00408cq4kq846t46nj2hsn6ps"}},"children":[]}}
+NavigationState = [Thread, Channel, Home]
+PAUSED: y8dy1ao4xiyjbchjtzz5u8midr Thread
+PARAMS:  {"componentId":"Thread","options":{"topBar":{"rightButtons":[{"id":"Thread-v00408cq4kq846t46nj2hsn6ps-2","component":{"name":"ThreadFollowButton","passProps":{"threadId":"v00408cq4kq846t46nj2hsn6ps"}}}]}}}
+NavigationState = [Thread, Channel, Home]
+PARAMS:  {"commandId":"showModal12","layout":{"id":"Stack11","type":"Stack","data":{},"children":[{"id":"Permalink","type":"Component","data":{"name":"Permalink","options":{"modalPresentationStyle":"overFullScreen","layout":{"componentBackgroundColor":"rgba(0,0,0,0.2)","backgroundColor":"transparent"},"statusBar":{"visible":true},"topBar":{"animate":true,"visible":false,"backButton":{"color":"#dddfe4","title":""},"background":{"color":"#0f1a2e"},"title":{"color":"#dddfe4","text":""},"leftButtonColor":"#dddfe4","rightButtonColor":"#dddfe4","height":0},"modal":{"swipeToDismiss":false},"animations":{"showModal":{"alpha":{"from":0,"to":1,"duration":250}},"dismissModal":{"enter":{"enabled":false},"exit":{"enabled":false}}}},"passProps":{"isPermalink":true,"teamName":"ozon","postId":"v0040pcq4koadnoggcdve6ugkk","isModal":true}},"children":[]}]}}
+NavigationState = [Permalink, Thread, Channel, Home]
+PAUSED: v00408cq4kq846t46nj2hsn6ps Permalink
+PARAMS:  {"commandId":"push14","componentId":"Permalink","layout":{"id":"Thread","type":"Component","data":{"name":"Thread","options":{"layout":{"componentBackgroundColor":"#0a111f"},"popGesture":true,"sideMenu":{"left":{"enabled":false},"right":{"enabled":false}},"statusBar":{"style":"light"},"topBar":{"animate":true,"visible":true,"backButton":{"color":"#dddfe4","title":"","testID":"screen.back.button"},"background":{"color":"#0f1a2e"},"title":{"color":"#dddfe4","text":"Thread"},"subtitle":{"color":"rgba(221,223,228,0.72)","text":"in firefighters"},"noBorder":true,"scrollEdgeAppearance":{"noBorder":true,"active":true}}},"passProps":{"rootId":"v0040pcq4koadnoggcdve6ugkk"}},"children":[]}}
+NavigationState = [Thread, Permalink, Channel, Home]
+RESUMED: v00408cq4kq846t46nj2hsn6ps Thread
+PARAMS:  {"componentId":"Thread","options":{"topBar":{"rightButtons":[{"id":"Thread-v0040pcq4koadnoggcdve6ugkk-3","component":{"name":"ThreadFollowButton","passProps":{"threadId":"v0040pcq4koadnoggcdve6ugkk"}}}]}}}
+NavigationState = [Thread, Permalink, Channel, Home]
+NavigationState = [Home]
+NavigationState = [Home]
+NavigationState = [Home]
+PARAMS:  {"commandId":"push6","componentId":"Home","layout":{"id":"Channel","type":"Component","data":{"name":"Channel","options":{"layout":{"componentBackgroundColor":"#ffffff"},"popGesture":true,"sideMenu":{"left":{"enabled":false},"right":{"enabled":false}},"statusBar":{"style":"light"},"topBar":{"animate":true,"visible":false,"backButton":{"color":"#ffffff","title":"","testID":"screen.back.button"},"background":{"color":"#1e325c"},"title":{"color":"#ffffff","text":""}}},"passProps":{}},"children":[]}}
+NavigationState = [Channel, Home]
+NavigationState = [Channel, Home]
+NavigationState = [Channel, Home]
+PARAMS:  {"commandId":"push8","componentId":"Channel","layout":{"id":"Thread","type":"Component","data":{"name":"Thread","options":{"layout":{"componentBackgroundColor":"#0a111f"},"popGesture":true,"sideMenu":{"left":{"enabled":false},"right":{"enabled":false}},"statusBar":{"style":"light"},"topBar":{"animate":true,"visible":true,"backButton":{"color":"#dddfe4","title":"","testID":"screen.back.button"},"background":{"color":"#0f1a2e"},"title":{"color":"#dddfe4","text":"Thread"},"subtitle":{"color":"rgba(221,223,228,0.72)","text":"in firefighters_stg"},"noBorder":true,"scrollEdgeAppearance":{"noBorder":true,"active":true}}},"passProps":{"rootId":"v00408cq4kq846t46nj2hsn6ps"}},"children":[]}}
+NavigationState = [Thread, Channel, Home]
+PAUSED: y8dy1ao4xiyjbchjtzz5u8midr Thread
+NavigationState = [Thread, Channel, Home]
+NavigationState = [Permalink, Thread, Channel, Home]
+PAUSED: v00408cq4kq846t46nj2hsn6ps Permalink
+PARAMS:  {"commandId":"push14","componentId":"Permalink","layout":{"id":"Thread","type":"Component","data":{"name":"Thread","options":{"layout":{"componentBackgroundColor":"#0a111f"},"popGesture":true,"sideMenu":{"left":{"enabled":false},"right":{"enabled":false}},"statusBar":{"style":"light"},"topBar":{"animate":true,"visible":true,"backButton":{"color":"#dddfe4","title":"","testID":"screen.back.button"},"background":{"color":"#0f1a2e"},"title":{"color":"#dddfe4","text":"Thread"},"subtitle":{"color":"rgba(221,223,228,0.72)","text":"in firefighters"},"noBorder":true,"scrollEdgeAppearance":{"noBorder":true,"active":true}}},"passProps":{"rootId":"v0040pcq4koadnoggcdve6ugkk"}},"children":[]}}
+NavigationState = [Thread, Permalink, Channel, Home]
+RESUMED: v00408cq4kq846t46nj2hsn6ps Thread
+NavigationState = [Thread, Permalink, Channel, Home]
+NavigationState = [Home]
+NavigationState = [Home]
+NavigationState = [Home]
+Push params:  {"commandId":"push6","componentId":"Home","layout":{"id":"Channel","type":"Component","data":{"name":"Channel","options":{"layout":{"componentBackgroundColor":"#ffffff"},"popGesture":true,"sideMenu":{"left":{"enabled":false},"right":{"enabled":false}},"statusBar":{"style":"light"},"topBar":{"animate":true,"visible":false,"backButton":{"color":"#ffffff","title":"","testID":"screen.back.button"},"background":{"color":"#1e325c"},"title":{"color":"#ffffff","text":""}}},"passProps":{}},"children":[]}}
+NavigationState = [Channel, Home]
+NavigationState = [Channel, Home]
+NavigationState = [Channel, Home]
+Push params:  {"commandId":"push8","componentId":"Channel","layout":{"id":"Thread","type":"Component","data":{"name":"Thread","options":{"layout":{"componentBackgroundColor":"#0a111f"},"popGesture":true,"sideMenu":{"left":{"enabled":false},"right":{"enabled":false}},"statusBar":{"style":"light"},"topBar":{"animate":true,"visible":true,"backButton":{"color":"#dddfe4","title":"","testID":"screen.back.button"},"background":{"color":"#0f1a2e"},"title":{"color":"#dddfe4","text":"Thread"},"subtitle":{"color":"rgba(221,223,228,0.72)","text":"in firefighters_stg"},"noBorder":true,"scrollEdgeAppearance":{"noBorder":true,"active":true}}},"passProps":{"rootId":"v00408cq4kq846t46nj2hsn6ps"}},"children":[]}}
+NavigationState = [Thread, Channel, Home]
+PAUSED: y8dy1ao4xiyjbchjtzz5u8midr Thread
+NavigationState = [Thread, Channel, Home]
+NavigationState = [Permalink, Thread, Channel, Home]
+PAUSED: v00408cq4kq846t46nj2hsn6ps Permalink
+Push params:  {"commandId":"push14","componentId":"Permalink","layout":{"id":"Thread","type":"Component","data":{"name":"Thread","options":{"layout":{"componentBackgroundColor":"#0a111f"},"popGesture":true,"sideMenu":{"left":{"enabled":false},"right":{"enabled":false}},"statusBar":{"style":"light"},"topBar":{"animate":true,"visible":true,"backButton":{"color":"#dddfe4","title":"","testID":"screen.back.button"},"background":{"color":"#0f1a2e"},"title":{"color":"#dddfe4","text":"Thread"},"subtitle":{"color":"rgba(221,223,228,0.72)","text":"in firefighters"},"noBorder":true,"scrollEdgeAppearance":{"noBorder":true,"active":true}}},"passProps":{"rootId":"v0040pcq4koadnoggcdve6ugkk"}},"children":[]}}
+NavigationState = [Thread, Permalink, Channel, Home]
+RESUMED: v00408cq4kq846t46nj2hsn6ps Thread
+NavigationState = [Thread, Permalink, Channel, Home]
+NavigationState = [Permalink, Channel, Home]
+PAUSED: v00408cq4kq846t46nj2hsn6ps Permalink
+NavigationState = [Channel, Home]
+RESUMED: 3my3ykfpffnhmp7zro8s3uurky Channel
+NavigationState = [Channel, Home]
+NavigationState = [Channel, Home]
+NavigationState = [Home]
+Push params:  {"commandId":"push20","componentId":"Home","layout":{"id":"Channel","type":"Component","data":{"name":"Channel","options":{"layout":{"componentBackgroundColor":"#0a111f"},"popGesture":true,"sideMenu":{"left":{"enabled":false},"right":{"enabled":false}},"statusBar":{"style":"light"},"topBar":{"animate":true,"visible":false,"backButton":{"color":"#dddfe4","title":"","testID":"screen.back.button"},"background":{"color":"#0f1a2e"},"title":{"color":"#dddfe4","text":""}}},"passProps":{}},"children":[]}}
+NavigationState = [Channel, Home]
+NavigationState = [Channel, Home]
+NavigationState = [[object Object]]
+NavigationState = [[object Object]]
+NavigationState = [[object Object]]
+NavigationState = [[object Object]]
+NavigationState = [[object Object]]
+NavigationState = [[object Object]]
+NavigationState = [[object Object]]
+NavigationState = [[object Object]]
+NavigationState = [[object Object]]
+NavigationState = [[object Object]]
+NavigationState = [Home]
+NavigationState = [Home]
+NavigationState = [Home]
+Push params:  {"commandId":"push6","componentId":"Home","layout":{"id":"Channel","type":"Component","data":{"name":"Channel","options":{"layout":{"componentBackgroundColor":"#ffffff"},"popGesture":true,"sideMenu":{"left":{"enabled":false},"right":{"enabled":false}},"statusBar":{"style":"light"},"topBar":{"animate":true,"visible":false,"backButton":{"color":"#ffffff","title":"","testID":"screen.back.button"},"background":{"color":"#1e325c"},"title":{"color":"#ffffff","text":""}}},"passProps":{}},"children":[]}}
+NavigationState = [Channel, Home]
+NavigationState = [Channel, Home]
+NavigationState = [Channel, Home]
+Push params:  {"commandId":"push8","componentId":"Channel","layout":{"id":"Thread","type":"Component","data":{"name":"Thread","options":{"layout":{"componentBackgroundColor":"#0a111f"},"popGesture":true,"sideMenu":{"left":{"enabled":false},"right":{"enabled":false}},"statusBar":{"style":"light"},"topBar":{"animate":true,"visible":true,"backButton":{"color":"#dddfe4","title":"","testID":"screen.back.button"},"background":{"color":"#0f1a2e"},"title":{"color":"#dddfe4","text":"Thread"},"subtitle":{"color":"rgba(221,223,228,0.72)","text":"in firefighters_stg"},"noBorder":true,"scrollEdgeAppearance":{"noBorder":true,"active":true}}},"passProps":{"rootId":"v00408cq4kq846t46nj2hsn6ps"}},"children":[]}}
+NavigationState = [Thread, Channel, Home]
+PAUSED: y8dy1ao4xiyjbchjtzz5u8midr Thread
+NavigationState = [Thread, Channel, Home]
+NavigationState = [Permalink, Thread, Channel, Home]
+PAUSED: v00408cq4kq846t46nj2hsn6ps Permalink
+Push params:  {"commandId":"push14","componentId":"Permalink","layout":{"id":"Thread","type":"Component","data":{"name":"Thread","options":{"layout":{"componentBackgroundColor":"#0a111f"},"popGesture":true,"sideMenu":{"left":{"enabled":false},"right":{"enabled":false}},"statusBar":{"style":"light"},"topBar":{"animate":true,"visible":true,"backButton":{"color":"#dddfe4","title":"","testID":"screen.back.button"},"background":{"color":"#0f1a2e"},"title":{"color":"#dddfe4","text":"Thread"},"subtitle":{"color":"rgba(221,223,228,0.72)","text":"in firefighters"},"noBorder":true,"scrollEdgeAppearance":{"noBorder":true,"active":true}}},"passProps":{"rootId":"v0040pcq4koadnoggcdve6ugkk"}},"children":[]}}
+NavigationState = [Thread, Permalink, Thread, Channel, Home]
+RESUMED: v00408cq4kq846t46nj2hsn6ps Thread
+NavigationState = [Thread, Permalink, Thread, Channel, Home]
+NavigationState = [Thread, Permalink, Thread, Channel, Home]
+NavigationState = [Thread, Permalink, Thread, Channel, Home]
+NavigationState = [Thread, Permalink, Thread, Channel, Home]
+NavigationState = [Home]
+NavigationState = [Home]
+NavigationState = [Home]
+NavigationState = [Channel, Home]
+NavigationState = [Channel, Home]
+NavigationState = [Channel, Home]
+NavigationState = [Channel, Home]
+Poped = {"componentId":"Channel"}
+NavigationState = [Home]
+NavigationState = [Home]
+NavigationState = [Home]
+NavigationState = [Home]
+NavigationState = [Home]
+NavigationState = [Channel, Home]
+NavigationState = [Channel, Home]
+NavigationState = [Channel, Home]
+NavigationState = [Channel, Home]
+Poped = {"componentId":"Channel"}
+NavigationState = [Home]
+NavigationState = [Channel, Home]
+NavigationState = [Thread, Channel, Home]
+PAUSED: y8dy1ao4xiyjbchjtzz5u8midr Thread
+NavigationState = [Thread, Channel, Home]
+NavigationState = [Permalink, Thread, Channel, Home]
+PAUSED: v00408cq4kq846t46nj2hsn6ps Permalink
+NavigationState = [Thread, Permalink, Thread, Channel, Home]
+RESUMED: v00408cq4kq846t46nj2hsn6ps Thread
+NavigationState = [Thread, Permalink, Thread, Channel, Home]
+Poped = {"componentId":"Thread"}
+NavigationState = [Permalink, Thread, Channel, Home]
+PAUSED: v00408cq4kq846t46nj2hsn6ps Permalink
+NavigationState = [Permalink, Thread, Channel, Home]
+Poped = {"componentId":"Thread"}
+NavigationState = [Permalink, Channel, Home]
+NavigationState = [Permalink, Channel, Home]
+Poped = {"componentId":"Channel"}
+NavigationState = [Permalink, Home]
+NavigationState = [Permalink, Home]
+NavigationState = [Channel, Permalink, Home]
+NavigationState = [Channel, Permalink, Home]
+NavigationState = [Channel, Permalink, Home]
+NavigationState = [Channel, Permalink, Home]
+NavigationState = [Channel, Permalink, Home]
+NavigationState = [Channel, Permalink, Home]
+NavigationState = [Channel, Permalink, Home]
+NavigationState = [Channel, Permalink, Home]
+NavigationState = [Channel, Permalink, Home]
+NavigationState = [Channel, Permalink, Home]
+NavigationState = [Channel, Permalink, Home]
+NavigationState = [Channel, Permalink, Home]
+NavigationState = [Channel, Permalink, Home]
+NavigationState = [Channel, Permalink, Home]
+NavigationState = [Channel, Permalink, Home]
+NavigationState = [Channel, Permalink, Home]
+NavigationState = [Channel, Permalink, Home]
+NavigationState = [Channel, Permalink, Home]
+NavigationState = [Channel, Permalink, Home]
+NavigationState = [Channel, Permalink, Home]
+NavigationState = [Channel, Permalink, Home]
+NavigationState = [Channel, Permalink, Home]
+NavigationState = [Channel, Permalink, Home]
+NavigationState = [Channel, Permalink, Home]
+NavigationState = [Channel, Permalink, Home]
+NavigationState = [Channel, Permalink, Home]
+NavigationState = [Channel, Permalink, Home]
+NavigationState = [Channel, Permalink, Home]
+NavigationState = [Channel, Permalink, Home]
+NavigationState = [Channel, Permalink, Home]
+NavigationState = [Channel, Permalink, Home]
+NavigationState = [Home]
+NavigationState = [Home]
+NavigationState = [Home]
+NavigationState = [Channel, Home]
+NavigationState = [Channel, Home]
+NavigationState = [Channel, Home]
+NavigationState = [Channel, Home]
+Poped = {"componentId":"Channel"}
+NavigationState = [Home]
+NavigationState = [Channel, Home]
+NavigationState = [Thread, Channel, Home]
+PAUSED: y8dy1ao4xiyjbchjtzz5u8midr Thread
+NavigationState = [Thread, Channel, Home]
+NavigationState = [Permalink, Thread, Channel, Home]
+PAUSED: v00408cq4kq846t46nj2hsn6ps Permalink
+NavigationState = [Thread, Permalink, Thread, Channel, Home]
+RESUMED: v00408cq4kq846t46nj2hsn6ps Thread
+NavigationState = [Thread, Permalink, Thread, Channel, Home]
+Poped = {"componentId":"Thread"}
+NavigationState = [Permalink, Thread, Channel, Home]
+PAUSED: v00408cq4kq846t46nj2hsn6ps Permalink
+NavigationState = [Permalink, Thread, Channel, Home]
+Poped = {"componentId":"Thread"}
+NavigationState = [Permalink, Channel, Home]
+NavigationState = [Permalink, Channel, Home]
+Poped = {"componentId":"Channel"}
+NavigationState = [Permalink, Home]
+NavigationState = [Permalink, Home]
+NavigationState = [Channel, Permalink, Home]
+NavigationState = [Channel, Permalink, Home]
+NavigationState = [Channel, Permalink, Home]
+NavigationState = [Channel, Permalink, Home]
+NavigationState = [Home]
+NavigationState = [Home]
+NavigationState = [Home]
+NavigationState = [Channel, Home]
+NavigationState = [Channel, Home]
+NavigationState = [Channel, Home]
+NavigationState = [Channel, Home]
+NavigationState = [Channel, Home]
+NavigationState = [Home]
+NavigationState = [Home]
+NavigationState = [Home]
+NavigationState = [Channel, Home]
+NavigationState = [Channel, Home]
+NavigationState = [Channel, Home]
+NavigationState = [Channel, Home]
+NavigationState = [Home]
+NavigationState = [Home]
+NavigationState = [Channel, Home]
+NavigationState = [Thread, Channel, Home]
+PAUSED: y8dy1ao4xiyjbchjtzz5u8midr Thread
+NavigationState = [Thread, Channel, Home]
+NavigationState = [Permalink, Thread, Channel, Home]
+PAUSED: v00408cq4kq846t46nj2hsn6ps Permalink
+NavigationState = [Thread, Permalink, Thread, Channel, Home]
+RESUMED: v00408cq4kq846t46nj2hsn6ps Thread
+NavigationState = [Thread, Permalink, Thread, Channel, Home]
+NavigationState = [Permalink, Thread, Channel, Home]
+NavigationState = [Permalink, Thread, Channel, Home]
+PAUSED: v00408cq4kq846t46nj2hsn6ps Permalink
+NavigationState = [Permalink, Thread, Channel, Home]
+NavigationState = [Permalink, Thread, Channel, Home]
+NavigationState = [Permalink, Thread, Channel, Home]
+NavigationState = [Home]
+RESUMED: 3my3ykfpffnhmp7zro8s3uurky Home
+NavigationState = [Home]
+NavigationState = [Home]
+NavigationState = [Home]
+NavigationState = [Home]
+NavigationState = [Home]
+NavigationState = [Home]
+NavigationState = [Home]
+NavigationState = [Home]
+NavigationState = [Channel, Home]
+NavigationState = [Thread, Channel, Home]
+PAUSED: y8dy1ao4xiyjbchjtzz5u8midr Thread
+NavigationState = [Thread, Channel, Home]
+NavigationState = [Thread, Channel, Home]
+NavigationState = [Thread, Channel, Home]
+NavigationState = [Home]
+PAUSED: v00408cq4kq846t46nj2hsn6ps Home
+RESUMED: y8dy1ao4xiyjbchjtzz5u8midr Home
+NavigationState = [Home]
+NavigationState = [Home]
+NavigationState = [Home]
+NavigationState = [Home]
+NavigationState = [Home]
+NavigationState = [Channel, Home]
+NavigationState = [Home]
+NavigationState = [Home]
+NavigationState = [Home]
+NavigationState = [Channel, Home]
+NavigationState = [Channel, Home]
+NavigationState = [Channel, Home]
+NavigationState = [Thread, Channel, Home]
+PAUSED: y8dy1ao4xiyjbchjtzz5u8midr Thread
+NavigationState = [Thread, Channel, Home]
+NavigationState = [Permalink, Thread, Channel, Home]
+PAUSED: v00408cq4kq846t46nj2hsn6ps Permalink
+NavigationState = [Thread, Permalink, Thread, Channel, Home]
+RESUMED: v00408cq4kq846t46nj2hsn6ps Thread
+NavigationState = [Thread, Permalink, Thread, Channel, Home]
+NavigationState = [Permalink, Thread, Channel, Home]
+NavigationState = [Permalink, Thread, Channel, Home]
+PAUSED: v00408cq4kq846t46nj2hsn6ps Permalink
+NavigationState = [Permalink, Thread, Channel, Home]
+OPERATION:  setRoot
+NavigationState = [Home]
+OPERATION:  mergeOptions
+NavigationState = [Home]
+OPERATION:  dismissAllOverlays
+NavigationState = [Home]
+OPERATION:  push
+NavigationState = [Channel, Home]
+OPERATION:  mergeOptions
+NavigationState = [Channel, Home]
+OPERATION:  mergeOptions
+NavigationState = [Channel, Home]
+OPERATION:  push
+NavigationState = [Thread, Channel, Home]
+PAUSED: y8dy1ao4xiyjbchjtzz5u8midr Thread
+OPERATION:  mergeOptions
+NavigationState = [Thread, Channel, Home]
+OPERATION:  showModal
+NavigationState = [Permalink, Thread, Channel, Home]
+PAUSED: v00408cq4kq846t46nj2hsn6ps Permalink
+OPERATION:  push
+NavigationState = [Thread, Permalink, Thread, Channel, Home]
+RESUMED: v00408cq4kq846t46nj2hsn6ps Thread
+OPERATION:  mergeOptions
+NavigationState = [Thread, Permalink, Thread, Channel, Home]
+NavigationState = [Permalink, Thread, Channel, Home]
+OPERATION:  mergeOptions
+NavigationState = [Permalink, Thread, Channel, Home]
+PAUSED: v00408cq4kq846t46nj2hsn6ps Permalink
+OPERATION:  dismissModal
+NavigationState = [Permalink, Thread, Channel, Home]
+OPERATION:  setRoot
+NavigationState = [Home]
+OPERATION:  mergeOptions
+NavigationState = [Home]
+OPERATION:  dismissAllOverlays
+NavigationState = [Home]
+OPERATION:  push
+NavigationState = [Channel, Home]
+OPERATION:  mergeOptions
+NavigationState = [Channel, Home]
+OPERATION:  mergeOptions
+NavigationState = [Channel, Home]
+OPERATION:  push
+NavigationState = [Thread, Channel, Home]
+PAUSED: y8dy1ao4xiyjbchjtzz5u8midr Thread
+OPERATION:  mergeOptions
+NavigationState = [Thread, Channel, Home]
+OPERATION:  showModal
+NavigationState = [Permalink, Thread, Channel, Home]
+PAUSED: v00408cq4kq846t46nj2hsn6ps Permalink
+OPERATION:  push
+NavigationState = [Thread, Permalink, Thread, Channel, Home]
+RESUMED: v00408cq4kq846t46nj2hsn6ps Thread
+OPERATION:  mergeOptions
+NavigationState = [Thread, Permalink, Thread, Channel, Home]
+NavigationState = [Permalink, Thread, Channel, Home]
+OPERATION:  mergeOptions
+NavigationState = [Permalink, Thread, Channel, Home]
+PAUSED: v00408cq4kq846t46nj2hsn6ps Permalink
+OPERATION:  dismissModal
+dismissModal = {"commandId":"dismissModal17","componentId":"Permalink","mergeOptions":{"componentId":"Permalink"}}
+NavigationState = [Permalink, Thread, Channel, Home]
+NavigationState = [Permalink, Channel, Home]
+OPERATION:  mergeOptions
+NavigationState = [Permalink, Channel, Home]
+OPERATION:  pop
+NavigationState = [Permalink, Channel, Home]
+NavigationState = [Permalink, Home]
+OPERATION:  dismissModal
+dismissModal = {"commandId":"dismissModal19","componentId":"Permalink","mergeOptions":{"animations":{"dismissModal":{"exit":{"enabled":false}}}}}
+NavigationState = [Permalink, Home]
+OPERATION:  dismissAllOverlays
+NavigationState = [Permalink, Home]
+OPERATION:  push
+NavigationState = [Channel, Permalink, Home]
+OPERATION:  dismissModal
+dismissModal = {"commandId":"dismissModal22","componentId":"Permalink","mergeOptions":{"animations":{"dismissModal":{"exit":{"enabled":false}}}}}
+NavigationState = [Channel, Permalink, Home]
+OPERATION:  dismissAllOverlays
+NavigationState = [Channel, Permalink, Home]
+OPERATION:  popTo
+NavigationState = [Channel, Permalink, Home]
+resumeTracking
+ trackerId: y8dy1ao4xiyjbchjtzz5u8midr
+ componentId: Channel
+resumeTracking
+ trackerId: v00408cq4kq846t46nj2hsn6ps
+ componentId: Thread
+resumeTracking
+ trackerId: v00408cq4kq846t46nj2hsn6ps
+ componentId: Thread
+resumeTracking
+ trackerId: v0040pcq4koadnoggcdve6ugkk
+ componentId: Thread
+pauseTracking
+ trackerId: v00408cq4kq846t46nj2hsn6ps
+ componentId: Thread
+pauseTracking
+ trackerId: v0040pcq4koadnoggcdve6ugkk
+ componentId: Thread
+resumeTracking
+ trackerId: 3my3ykfpffnhmp7zro8s3uurky
+ componentId: Channel
+resumeTracking
+ trackerId: y8dy1ao4xiyjbchjtzz5u8midr
+ componentId: Channel
+pauseTracking
+ trackerId: y8dy1ao4xiyjbchjtzz5u8midr
+ componentId: Channel
+resumeTracking
+ trackerId: y8dy1ao4xiyjbchjtzz5u8midr
+ componentId: Channel
+resumeTracking
+ trackerId: y8dy1ao4xiyjbchjtzz5u8midr
+ componentId: Channel
+pauseTracking
+ trackerId: y8dy1ao4xiyjbchjtzz5u8midr
+ componentId: Channel
+resumeTracking
+ trackerId: v00408cq4kq846t46nj2hsn6ps
+ componentId: Thread
+pauseTracking
+ trackerId: v00408cq4kq846t46nj2hsn6ps
+ componentId: Thread
+resumeTracking
+ trackerId: y8dy1ao4xiyjbchjtzz5u8midr
+ componentId: Channel
+pauseTracking
+ trackerId: y8dy1ao4xiyjbchjtzz5u8midr
+ componentId: Channel
+resumeTracking
+ trackerId: v00408cq4kq846t46nj2hsn6ps
+ componentId: Thread
+resumeTracking
+ trackerId: v00408cq4kq846t46nj2hsn6ps
+ componentId: Thread
+resumeTracking
+ trackerId: v0040pcq4koadnoggcdve6ugkk
+ componentId: Thread
+pauseTracking
+ trackerId: v00408cq4kq846t46nj2hsn6ps
+ componentId: Thread
+pauseTracking
+ trackerId: v0040pcq4koadnoggcdve6ugkk
+ componentId: Thread
+resumeTracking
+ trackerId: y8dy1ao4xiyjbchjtzz5u8midr
+ componentId: Channel
+pauseTracking
+ trackerId: y8dy1ao4xiyjbchjtzz5u8midr
+ componentId: Channel
+ event = {"componentId":"Channel","componentName":"Channel","componentType":"Component"}
+resumeTracking
+ trackerId: y8dy1ao4xiyjbchjtzz5u8midr
+ componentId: Channel
+pauseTracking
+ trackerId: y8dy1ao4xiyjbchjtzz5u8midr
+ componentId: Channel
+ event = {"componentId":"Channel","componentName":"Channel","componentType":"Component"}
+resumeTracking
+ trackerId: v00408cq4kq846t46nj2hsn6ps
+ componentId: Thread
+pauseTracking
+ trackerId: v00408cq4kq846t46nj2hsn6ps
+ componentId: Thread
+ event = {"componentId":"Thread","componentName":"Thread","componentType":"Component"}
+resumeTracking
+ trackerId: y8dy1ao4xiyjbchjtzz5u8midr
+ componentId: Channel
+pauseTracking
+ trackerId: y8dy1ao4xiyjbchjtzz5u8midr
+ componentId: Channel
+ event = {"componentId":"Channel","componentName":"Channel","componentType":"Component"}
+resumeTracking
+ trackerId: y8dy1ao4xiyjbchjtzz5u8midr
+ componentId: Channel
+push id: Channel_0
+push id: Thread_0
+push id: Thread_0
+push id: Thread_0
+push id: GlobalThreads_0Push
+push id: Thread_0Push
+push id: Channel_0Push
+push id: Thread_0Push
