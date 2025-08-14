@@ -5,6 +5,20 @@ LDFLAGS=""
 SRC="debugger.c"
 BUNDLE="./app"
 PROJECT="./debugger"
+OS="$(uname)"
+
+case $OS in
+  'Darwin')
+    LDFLAGS="-framework CoreVideo -framework Cocoa -framework OpenGL -framework IOKit"
+    ;;
+  'Linux')
+    LDFLAGS="-lX11 -lGL -lXrandr"
+    ;;
+  '*')
+    echo "os not supported ${OS}"
+    exit 1
+    ;;
+esac
 
 case $1 in 
   'build')

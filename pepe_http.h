@@ -446,8 +446,14 @@ Pepe_HttpWorker(Pepe_Arena *arena, i32 l, Pepe_HttpHandler handler)
   } 
 }
 
+typedef struct Pepe_HttpWorkers Pepe_HttpWorkers;
+struct Pepe_HttpWorkers {
+  i32 *data;
+  u32 length;
+};
+
 void
-Pepe_HttpListenAndServe(Pepe_Arena arena, Pepe_HttpHandler handler, u16 port)
+Pepe_HttpListenAndServe(Pepe_Arena arena, Pepe_HttpHandler handler, u16 port, Pepe_HttpWorkers workers)
 {
   struct sockaddr_in addr;
 	i32	enable = 1;
@@ -478,13 +484,16 @@ Pepe_HttpListenAndServe(Pepe_Arena arena, Pepe_HttpHandler handler, u16 port)
     perror("listen() call failed");
     return;
   }
-  for (i = 0; i < PEPE_HTTP_WORKERS - 1; i++) {
+  for (i = 0; i < (i32)workers.length - 1; i++) {
     pid = fork();
+    workers.data[i] = pid;
     if (pid == 0) {
       break;
     }
   }
-  Pepe_HttpWorker(&arena, l, handler);
+  if (pid == 0) {
+    Pepe_HttpWorker(&arena, l, handler);
+  }
 
   return;
 }

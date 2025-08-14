@@ -8,11 +8,14 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <netinet/in.h>
+#include <wait.h>
 #include "../u.h"
 #include "../pepe_core.h"
 #include "../pepe_memcmp.h"
 #include "../pepe_encoding.h"
 #include "../pepe_http.h"
+#define RGFW_IMPLEMENTATION
+#include "../external/RGFW.h"
 
 #define BUF_SIZE 131072
 
@@ -35,7 +38,6 @@ UpgradeToWebsocketProtocol(Pepe_HttpRequest *request, Pepe_HttpResponse *respons
   }
 
   wsResponseKey = Pepe_WebsocketSecWebsocketAcceptHeader(response->arena, wsKeyHeader);
-  printf("wsResponseKey  = %.*s\n", (u32)wsResponseKey.length, wsResponseKey.base);
 
   Pepe_HttpResponseWriteCString(response, "HTTP/1.1 101 Switching Protocols\r\n"); 
   Pepe_HttpResponseWriteCString(response, "Upgrade: websocket\r\n");
@@ -122,7 +124,7 @@ HandleWebsocketMessage(Pepe_HttpRequest *request, Pepe_HttpResponse *response)
       rcvd = Pepe_ReadFromConnection(request, buf);
       if (rcvd != (i64)buf.length) {
 
-        printf("recv() call failed1 %lld\n", rcvd);
+        printf("recv() call failed1 %ld\n", rcvd);
         break; 
       }
       if (size == 126) {
@@ -197,6 +199,52 @@ HandleHttpRequest(Pepe_HttpRequest *request, Pepe_HttpResponse *response, void *
   }
 }
 
+void keyfunc(RGFW_window* win, u8 key, u8 keyChar, u8 keyMod, u8 pressed) {
+    unused(keyChar);
+    unused(keyMod);
+    if (key == RGFW_escape && pressed) {
+        RGFW_window_setShouldClose(win, true);
+    }
+}
+
+void
+UIHandle(void) {
+  RGFW_window* win = RGFW_createWindow("a window", RGFW_RECT(0, 0, 800, 600), RGFW_windowCenter | RGFW_windowNoResize);
+
+  RGFW_setKeyCallback(keyfunc); // you can use callbacks like this if you want
+
+  while (RGFW_window_shouldClose(win) == false) {
+      while (RGFW_window_checkEvent(win)) {  // or RGFW_window_checkEvents(); if you only want callbacks
+          // you can either check the current event yourself
+          if (win->event.type == RGFW_quit) break;
+          
+          if (win->event.type == RGFW_mouseButtonPressed && win->event.button == RGFW_mouseLeft) {
+              printf("You clicked at x: %d, y: %d\n", win->event.point.x, win->event.point.y);
+          }
+
+          // or use the existing functions
+          if (RGFW_isMousePressed(win, RGFW_mouseRight)) {
+              printf("The right mouse button was clicked at x: %d, y: %d\n", win->event.point.x, win->event.point.y);
+          }
+      }
+      
+      glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+      glClear(GL_COLOR_BUFFER_BIT);
+
+      // You can use modern OpenGL techniques, but this method is more straightforward for drawing just one triangle.
+      glBegin(GL_TRIANGLES);
+      glColor3f(1, 0, 0); glVertex2f(-0.6, -0.75);
+      glColor3f(0, 1, 0); glVertex2f(0.6, -0.75);
+      glColor3f(0, 0, 1); glVertex2f(0, 0.75);
+      glEnd();
+
+      RGFW_window_swapBuffers(win);
+  }
+  printf("window closing\n");
+
+  RGFW_window_close(win);
+}
+
 i32
 main(i32 argc, char **argv)
 {
@@ -206,6 +254,11 @@ main(i32 argc, char **argv)
   Pepe_Slice arenaMemory;
   Pepe_Arena arena;
   Pepe_HttpHandler handler;
+  Pepe_HttpWorkers httpWorkers;
+  // i32 pidIndex;
+  i32 workersData[4]; 
+  httpWorkers.length = 4;
+  httpWorkers.data = workersData;
   requredMemory = BUF_SIZE;
   arenaMemory = Pepe_SliceInit(mmap(nil, requredMemory, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0), requredMemory);
 
@@ -213,5 +266,9 @@ main(i32 argc, char **argv)
   handler.userdata = nil;
   handler.handle = HandleHttpRequest;
 
-  Pepe_HttpListenAndServe(arena, handler, 8080);
+  Pepe_HttpListenAndServe(arena, handler, 8080, httpWorkers);
+  UIHandle(); 
+  for (u32 i = 0; i < httpWorkers.length; i++) {
+    kill(httpWorkers.data[i], SIGTERM);
+  }
 }
