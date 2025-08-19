@@ -14,63 +14,20 @@
 #include "../pepe_memcmp.h"
 #include "../pepe_encoding.h"
 #include "../pepe_http.h"
+#include "../pepe_graphics.h"
+#include "../pepe_websockets.h"
+
+#define RGFW_ALLOC_DROPFILES
 #define RGFW_IMPLEMENTATION
+#define RGFW_PRINT_ERRORS
+#define RGFW_DEBUG
 #include "../external/RGFW.h"
+#define RGL_LOAD_IMPLEMENTATION
+#include "../external/RGLLoad.h"
+#include "../pepe_gl.h"
+#include "ui.c"
 
-#define BUF_SIZE 131072
-
-bool
-UpgradeToWebsocketProtocol(Pepe_HttpRequest *request, Pepe_HttpResponse *response)
-{
-  Pepe_String wsKeyHeader;
-  Pepe_String wsResponseKey;
-
-  if (!Pepe_HttpHeadersHasValueCString(&request->headers, "Upgrade", "websocket")) {
-    return false;
-  }
-  if (!Pepe_HttpHeadersHasValueCString(&request->headers, "Connection", "Upgrade")) {
-    return false;
-  }
-
-  wsKeyHeader = Pepe_HttpHeadersGet(&request->headers, Pepe_StringFromCString("Sec-Websocket-Key"));
-  if (wsKeyHeader.length == 0) {
-    return false;
-  }
-
-  wsResponseKey = Pepe_WebsocketSecWebsocketAcceptHeader(response->arena, wsKeyHeader);
-
-  Pepe_HttpResponseWriteCString(response, "HTTP/1.1 101 Switching Protocols\r\n"); 
-  Pepe_HttpResponseWriteCString(response, "Upgrade: websocket\r\n");
-  Pepe_HttpResponseWriteCString(response, "Connection: Upgrade\r\n");
-  Pepe_HttpResponseWriteCString(response, "Sec-WebSocket-Accept: ");
-  Pepe_HttpResponseWrite(response, wsResponseKey);
-  Pepe_HttpResponseWriteCString(response, "\r\n\r\n"); 
-
-  return true;
-}
-
-void
-WebsocketClose(Pepe_HttpResponse *response, u16 status)
-{
-  Pepe_String msg;
-  byte buf[4];
-  buf[0] = 0;
-
-  buf[0] |= 8;
-  buf[0] |= 0x80;
-  buf[1] = 2;
-
-  printf("closing connection\n");
-
-  status = PEPE_IS_BE() ? status : Pepe_U16SwapBytes(status);
-  *(u16 *)(buf + 2) = status;
-  
-  msg.base = buf;
-  msg.length = 4;
-
-  Pepe_HttpResponseWrite(response, msg);
-  Pepe_HttpResponseClose(response);
-}
+#define BUF_SIZE 131072 * 2
 
 void
 HandleWebsocketMessage(Pepe_HttpRequest *request, Pepe_HttpResponse *response)
@@ -189,60 +146,14 @@ HandleHttpRequest(Pepe_HttpRequest *request, Pepe_HttpResponse *response, void *
   unused(userdata);
   Pepe_HttpRequestPrint(request);
 
-  if (UpgradeToWebsocketProtocol(request, response)) {
+  if (Pepe_UpgradeToWebsocketProtocol(request, response)) {
     printf("Upgrade to websocket success\n");
     HandleWebsocketMessage(request, response);
-    WebsocketClose(response, 1000);
+    Pepe_WebsocketClose(response, 1000);
   } else {
     printf("Upgrade to websocket failed\n");
-    WebsocketClose(response, 1000);
+    Pepe_WebsocketClose(response, 1000);
   }
-}
-
-void keyfunc(RGFW_window* win, u8 key, u8 keyChar, u8 keyMod, u8 pressed) {
-    unused(keyChar);
-    unused(keyMod);
-    if (key == RGFW_escape && pressed) {
-        RGFW_window_setShouldClose(win, true);
-    }
-}
-
-void
-UIHandle(void) {
-  RGFW_window* win = RGFW_createWindow("a window", RGFW_RECT(0, 0, 800, 600), RGFW_windowCenter | RGFW_windowNoResize);
-
-  RGFW_setKeyCallback(keyfunc); // you can use callbacks like this if you want
-
-  while (RGFW_window_shouldClose(win) == false) {
-      while (RGFW_window_checkEvent(win)) {  // or RGFW_window_checkEvents(); if you only want callbacks
-          // you can either check the current event yourself
-          if (win->event.type == RGFW_quit) break;
-          
-          if (win->event.type == RGFW_mouseButtonPressed && win->event.button == RGFW_mouseLeft) {
-              printf("You clicked at x: %d, y: %d\n", win->event.point.x, win->event.point.y);
-          }
-
-          // or use the existing functions
-          if (RGFW_isMousePressed(win, RGFW_mouseRight)) {
-              printf("The right mouse button was clicked at x: %d, y: %d\n", win->event.point.x, win->event.point.y);
-          }
-      }
-      
-      glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-      glClear(GL_COLOR_BUFFER_BIT);
-
-      // You can use modern OpenGL techniques, but this method is more straightforward for drawing just one triangle.
-      glBegin(GL_TRIANGLES);
-      glColor3f(1, 0, 0); glVertex2f(-0.6, -0.75);
-      glColor3f(0, 1, 0); glVertex2f(0.6, -0.75);
-      glColor3f(0, 0, 1); glVertex2f(0, 0.75);
-      glEnd();
-
-      RGFW_window_swapBuffers(win);
-  }
-  printf("window closing\n");
-
-  RGFW_window_close(win);
 }
 
 i32
@@ -267,7 +178,8 @@ main(i32 argc, char **argv)
   handler.handle = HandleHttpRequest;
 
   Pepe_HttpListenAndServe(arena, handler, 8080, httpWorkers);
-  UIHandle(); 
+  
+  UIHandle(&arena); 
   for (u32 i = 0; i < httpWorkers.length; i++) {
     kill(httpWorkers.data[i], SIGTERM);
   }

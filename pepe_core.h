@@ -1,6 +1,7 @@
 #ifndef PEPE_CORE_H
 #define PEPE_CORE_H
 
+#define MULTILINE_STR(...) #__VA_ARGS__
 #define PEPE_PACKED_ENUM enum __attribute__((__packed__))
 #define max(A, B) ((A) > (B) ? (A) : (B))
 #define min(A, B) ((A) > (B) ? (B) : (A))
