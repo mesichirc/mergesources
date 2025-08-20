@@ -8,7 +8,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <netinet/in.h>
-#include <wait.h>
 #include "../u.h"
 #include "../pepe_core.h"
 #include "../pepe_memcmp.h"
