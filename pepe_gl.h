@@ -466,7 +466,47 @@ Pepe_GLFlush(Pepe_GLContext *context)
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glBlendEquation(GL_FUNC_ADD);
-  glUseProgram(ctx->DefaultShader);
+  glUseProgram(context->defaultShaderID);
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, context->defaultTextureID);
+  glBindBuffer(GL_ARRAY_BUFFER, context->VBO[PEPE_VBO_POSITIONS]);
+  glBufferSubData(GL_ARRAY_BUFFER, 0, context->vertexes.length * 3 * sizeof(f32), context->vertexes.positions);
+
+  glBindBuffer(GL_ARRAY_BUFFER, context->VBO[PEPE_VBO_TEXCOORDS]);
+  glBufferSubData(GL_ARRAY_BUFFER, 0, context->vertexes.index * 2 * sizeof(f32), ctx->vertexes.texcoords);
+
+  glBindBuffer(GL_ARRAY_BUFFER, context->VBO[PEPE_VBO_COLORS]);
+  glBufferSubData(GL_ARRAY_BUFFER, 0, context->vertexes.index * 4 * sizeof(u8), ctx->vertexes.colors); 
+
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, context->VBO[SCV_VBO_INDICIES]);
+  glBindVertexArray(context->VAO);
+  glUniformMatrix4fv(context->defaultShaderLocations.mvp, 1, false, Proj);
+
+  for (i = 0; i < context->drawcalls.length; i++) {
+    
+    drawcall = context->drawcalls.data + i;
+    if (drawcall->length == 0) {
+      continue;
+    }
+    indicies = context->indicies.data + drawcall->start;
+    glUseProgram(drawcall->shaderID);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, drawcall->textureID);
+    glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, drawcall->length * sizeof(u32), indicies);
+    glDrawElements(GL_TRIANGLES, drawcall->length, GL_UNSIGNED_INT, (void *)0); 
+  }
+
+  glUseProgram(0);
+  context->vertexes.length = 0;
+  context->indicies.length = 0;
+
+  context->drawcalls.length = 1;
+  drawcall = context->drawcalls.data;
+
+  drawcall.start  = 0;
+  drawcall.length = 0;
+  drawcall.textureID = context->defaultTextureID;
+  drawcall.shaderID = context->defaultShaderID;
 }
 
 void
@@ -521,6 +561,12 @@ Pepe_GLDrawRectInternal(Pepe_GLContext *context, Pepe_GRect rect, Pepe_GColor co
   Pepe_GLPushIndex(context, i1);  
   Pepe_GLPushIndex(context, i3);  
   Pepe_GLPushIndex(context, i4);  
+}
+
+void
+Pepe_GLEndDraw(Pepe_GLContext *context) 
+{
+  Pepe_GLFlush(context);
 }
 
 
