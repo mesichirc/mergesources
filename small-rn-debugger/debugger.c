@@ -80,7 +80,7 @@ HandleWebsocketMessage(Pepe_HttpRequest *request, Pepe_HttpResponse *response)
       rcvd = Pepe_ReadFromConnection(request, buf);
       if (rcvd != (i64)buf.length) {
 
-        printf("recv() call failed1 %ld\n", rcvd);
+        printf("recv() call failed1 %lld\n", rcvd);
         break; 
       }
       if (size == 126) {

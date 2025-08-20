@@ -9,7 +9,7 @@ OS="$(uname)"
 
 case $OS in
   'Darwin')
-    LDFLAGS="-framework CoreVideo -framework Cocoa -framework OpenGL -framework IOKit"
+    LDFLAGS="-Wno-deprecated-declarations -framework CoreVideo -framework Cocoa -framework OpenGL -framework IOKit"
     ;;
   'Linux')
     LDFLAGS="-lX11 -lGL -lXrandr"

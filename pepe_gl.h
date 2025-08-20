@@ -92,6 +92,10 @@ Pepe_GLContextDeclarationInit(
 
 typedef struct Pepe_GLContext Pepe_GLContext;
 struct Pepe_GLContext {
+  f32                     pixelRatio;
+  f32                     scaleX;
+  f32                     scaleY;
+  Pepe_GRect              viewport;
   Pepe_Arena              *arena;
   Pepe_GLDrawCallArray    drawcalls;
   Pepe_GLVertexes         vertexes;
@@ -261,6 +265,10 @@ Pepe_GLContextInit(Pepe_Arena *arena, Pepe_GLContext *context, Pepe_GLContextDec
   whitepixels[2] = 255;
   whitepixels[3] = 255;
 
+  context->scaleX = 1.0f;
+  context->scaleY = 1.0f;
+  context->pixelRatio = 1.0f;
+  context->viewport = declaration->viewport;
   context->arena = arena;
   indiciesSize = sizeof(u32) * declaration->vertexesCount * 2;
   textureCoordinatesSize = sizeof(f32) * declaration->vertexesCount * 2;
@@ -290,7 +298,8 @@ Pepe_GLContextInit(Pepe_Arena *arena, Pepe_GLContext *context, Pepe_GLContextDec
     return false;
   }
 
-  context->vertexes.length = declaration->vertexesCount;
+  context->vertexes.capacity = declaration->vertexesCount;
+  context->vertexes.length = 0;
   context->vertexes.textureCoordinates = Pepe_ArenaAllocAlign(
       context->arena,
       textureCoordinatesSize,
@@ -384,15 +393,21 @@ Pepe_GLContextInit(Pepe_Arena *arena, Pepe_GLContext *context, Pepe_GLContextDec
 }
 
 void
+Pepe_GLContextSetScale(Pepe_GLContext *context, f32 scaleX, f32 scaleY){
+  context->scaleX = scaleX;
+  context->scaleY = scaleY;
+}
+
+void
 Pepe_GLDrawCallArrayAppend(Pepe_GLDrawCallArray *drawcalls, Pepe_GLDrawCall drawcall) 
 {
-  assert(drawcalls.length < drawcalls.capacity);
+  assert(drawcalls->length < drawcalls->capacity);
   *(drawcalls->data + drawcalls->length) = drawcall;
   drawcalls->length++;
 }
 
 void
-Pepe_GlBeginDraw(Pepe_GLContext *context)
+Pepe_GLBeginDraw(Pepe_GLContext *context)
 {
   Pepe_GLDrawCall drawcall;
 
@@ -404,7 +419,7 @@ Pepe_GlBeginDraw(Pepe_GLContext *context)
   drawcall.textureID = context->defaultTextureID;
   drawcall.shaderID = context->defaultShaderID;
 
-  Pepe_GlLDrawCallArrayAppend(&context->drawcalls, drawcall);
+  Pepe_GLDrawCallArrayAppend(&context->drawcalls, drawcall);
 }
 
 u32
@@ -443,7 +458,7 @@ Pepe_GLFlush(Pepe_GLContext *context)
 {
   u32 i;
   u32 *indicies;
-  Pepe_GLDrawcall *drawcall;
+  Pepe_GLDrawCall *drawcall;
   f32 f1, f2;
   Pepe_GPoint origin;
   Pepe_GSize  size;
@@ -451,18 +466,22 @@ Pepe_GLFlush(Pepe_GLContext *context)
   origin = context->viewport.origin;
   size   = context->viewport.size;
 
+  
   f1 = 2.0f / size.width;
-  f2 = 2.0f / size.height;
+  f2 = -2.0f / size.height;
 
   f32 Proj[] = 
   {
-       a, 0.0f, 0.0f, 0.0f,
-    0.0f,    b, 0.0f, 0.0f,
+      f1, 0.0f, 0.0f, 0.0f,
+    0.0f,   f2, 0.0f, 0.0f,
     0.0f, 0.0f, 1.0f, 0.0f,
    -1.0f, 1.0f, 0.0f, 1.0f
   };
 
-  glViewport((u32)origin.x, (u32)origin.y, (u32)size.width, (u32)size.height);
+  if (context->vertexes.length == 0) {
+    return;
+  }
+  glViewport((u32)origin.x * context->pixelRatio, (u32)origin.y * context->pixelRatio, (u32)size.width * context->pixelRatio, (u32)size.height * context->pixelRatio);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glBlendEquation(GL_FUNC_ADD);
@@ -473,27 +492,26 @@ Pepe_GLFlush(Pepe_GLContext *context)
   glBufferSubData(GL_ARRAY_BUFFER, 0, context->vertexes.length * 3 * sizeof(f32), context->vertexes.positions);
 
   glBindBuffer(GL_ARRAY_BUFFER, context->VBO[PEPE_VBO_TEXCOORDS]);
-  glBufferSubData(GL_ARRAY_BUFFER, 0, context->vertexes.index * 2 * sizeof(f32), ctx->vertexes.texcoords);
+  glBufferSubData(GL_ARRAY_BUFFER, 0, context->vertexes.length * 2 * sizeof(f32), context->vertexes.textureCoordinates);
 
   glBindBuffer(GL_ARRAY_BUFFER, context->VBO[PEPE_VBO_COLORS]);
-  glBufferSubData(GL_ARRAY_BUFFER, 0, context->vertexes.index * 4 * sizeof(u8), ctx->vertexes.colors); 
+  glBufferSubData(GL_ARRAY_BUFFER, 0, context->vertexes.length * 4 * sizeof(u8), context->vertexes.colors); 
 
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, context->VBO[SCV_VBO_INDICIES]);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, context->VBO[PEPE_VBO_INDICIES]);
   glBindVertexArray(context->VAO);
-  glUniformMatrix4fv(context->defaultShaderLocations.mvp, 1, false, Proj);
+  glUniformMatrix4fv(context->defaultShaderLocations.mpv, 1, false, Proj);
 
-  for (i = 0; i < context->drawcalls.length; i++) {
-    
+  for (i = 0; i < context->drawcalls.length; i++) { 
     drawcall = context->drawcalls.data + i;
     if (drawcall->length == 0) {
       continue;
     }
     indicies = context->indicies.data + drawcall->start;
-    glUseProgram(drawcall->shaderID);
+    glUseProgram(context->defaultShaderID);
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, drawcall->textureID);
+    glBindTexture(GL_TEXTURE_2D, context->defaultTextureID);
     glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, drawcall->length * sizeof(u32), indicies);
-    glDrawElements(GL_TRIANGLES, drawcall->length, GL_UNSIGNED_INT, (void *)0); 
+    glDrawElements(GL_TRIANGLES, drawcall->length, GL_UNSIGNED_INT, nil); 
   }
 
   glUseProgram(0);
@@ -503,10 +521,10 @@ Pepe_GLFlush(Pepe_GLContext *context)
   context->drawcalls.length = 1;
   drawcall = context->drawcalls.data;
 
-  drawcall.start  = 0;
-  drawcall.length = 0;
-  drawcall.textureID = context->defaultTextureID;
-  drawcall.shaderID = context->defaultShaderID;
+  drawcall->start  = 0;
+  drawcall->length = 0;
+  drawcall->textureID = context->defaultTextureID;
+  drawcall->shaderID = context->defaultShaderID;
 }
 
 void
@@ -514,7 +532,7 @@ Pepe_GLPushIndex(Pepe_GLContext *context, u32 index)
 {
   u32 length;
 
-  Pepe_GLDrawcall *drawcall;
+  Pepe_GLDrawCall *drawcall;
 
   length   = context->indicies.length;
   drawcall = context->drawcalls.data + (context->drawcalls.length - 1);
@@ -528,29 +546,39 @@ Pepe_GLPushIndex(Pepe_GLContext *context, u32 index)
 }
 
 void
-Pepe_GLDrawRectInternal(Pepe_GLContext *context, Pepe_GRect rect, Pepe_GColor color, Pepe_GLUVRect *uvs)
+Pepe_GLDrawRectInternal(
+    Pepe_GLContext *context, 
+    f32 x,
+    f32 y,
+    f32 width,
+    f32 height,
+    u8 r, 
+    u8 g,
+    u8 b,
+    u8 a,
+    Pepe_GLUVRect *uvs
+)
 {
+  Pepe_GColor color;
   u32 i1, i2, i3, i4;
-  f32 x, y, width, height;
-  Pepe_GF32Vec3 position;
-  Pepe_GF32Vec2 textureCoordinate;
+
+  color.r = r;
+  color.g = g;
+  color.b = b;
+  color.a = a;
 
   if (context->vertexes.length >= context->vertexes.capacity - 5) {
-    Pepe_GLFlush(Pepe_GLContext *context);
+    Pepe_GLFlush(context);
   }
-  x = rect.origin.x;
-  y = rect.origin.y;
-  width = rect.size.width;
-  height = rect.size.height;
 
   // top left
-  i1 = Pepe_GLPushVertex(context, x, y, 1.0f, uvs ? uvs->topLeft[0] : 0.0f, uvs ? uvs->topLeft[1] : 0.0f);
+  i1 = Pepe_GLPushVertex(context, x, y, 1.0f, uvs ? uvs->topLeft[0] : 0.0f, uvs ? uvs->topLeft[1] : 0.0f, color);
   // top right
-  i2 = Pepe_GLPushVertex(context, x + width, y, 1.0f, uvs ? uvs->topRight[0] : 0.0f, uvs ? uvs->topRight[1] : 0.0f);
+  i2 = Pepe_GLPushVertex(context, x + width, y, 1.0f, uvs ? uvs->topRight[0] : 0.0f, uvs ? uvs->topRight[1] : 0.0f, color);
   // bottom right
-  i3 = Pepe_GLPushVertex(context, x + width, y + height, 1.0f, uvs ? uvs->bottomRight[0] : 0.0f, uvs ? uvs->bottomRight[1] : 0.0f);
+  i3 = Pepe_GLPushVertex(context, x + width, y + height, 1.0f, uvs ? uvs->bottomRight[0] : 0.0f, uvs ? uvs->bottomRight[1] : 0.0f, color);
   // bottom left
-  i4 = Pepe_GLPushVertex(context, x, y + height, 1.0f, uvs ? uvs->bottomLeft[0] : 0.0f, uvs ? uvs->bottomLeft[1] : 0.0f);
+  i4 = Pepe_GLPushVertex(context, x, y + height, 1.0f, uvs ? uvs->bottomLeft[0] : 0.0f, uvs ? uvs->bottomLeft[1] : 0.0f, color);
 
 
   // clockwise push indicies
