@@ -6,9 +6,9 @@
 #include "pepe_core.h"
 #include "pepe_encoding.h"
 #include "pepe_memcmp.h"
+#include "pepe_threadpool.h"
 #include "u.h"
 #define PEPE_HTTP_WORKERS 4
-
 
 typedef struct Pepe_HttpHeader Pepe_HttpHeader;
 struct Pepe_HttpHeader {
@@ -35,8 +35,10 @@ struct Pepe_HttpResponse {
   i32 connection;
 };
 
-#define PEPE_HTTP_REQUEST_SIZE 65536
-#define PEPE_HTTP_RESPONSE_SIZE 65536
+#define PEPE_HTTP_REQUEST_SIZE 65536 / 2
+#define PEPE_HTTP_RESPONSE_SIZE 65536 / 2
+
+#define PEPE_WORKER_BUF_SIZE 4096 + PEPE_HTTP_RESPONSE_SIZE + PEPE_HTTP_RESPONSE_SIZE
 
 typedef PEPE_PACKED_ENUM {
   PEPE_HTTP_METHOD_UNKNOWN,
@@ -393,7 +395,7 @@ Pepe_HttpResponseClose(Pepe_HttpResponse *response)
 }
 
 void
-Pepe_HttpRespond(Pepe_Arena *arena, i32 s, Pepe_HttpHandler handler)
+Pepe_HttpRespond(Pepe_Arena *arena, i32 s, i32 pid, Pepe_HttpHandler handler)
 {
   Pepe_HttpRequest request;
   Pepe_HttpResponse response;
@@ -412,9 +414,9 @@ Pepe_HttpRespond(Pepe_Arena *arena, i32 s, Pepe_HttpHandler handler)
 
   rcvd = recv(s, requestBuffer.base, requestBuffer.capacity, 0);
   if (rcvd < 0) {
-    perror("recv() call failed");
+    fprintf(stderr, "recv() call failed, pid = %d\n", pid);
   } else if (rcvd == 0) {
-    fprintf(stderr, "client disconnected upexpectedly.\n");
+    fprintf(stderr, "client disconnected upexpectedly. pid = %d\n", pid);
   } else {
     requestBuffer.length = (u64)rcvd;
     request.memory = requestBuffer;
@@ -422,45 +424,79 @@ Pepe_HttpRespond(Pepe_Arena *arena, i32 s, Pepe_HttpHandler handler)
     if (request.valid) {
       handler.handle(&request, &response, handler.userdata);
     } else {
-      fprintf(stderr, "can't parse request.\n");
+      fprintf(stderr, "can't parse request. pid = %d\n", pid);
     }
   }
 }
 
 void
-Pepe_HttpWorker(Pepe_Arena *arena, i32 l, Pepe_HttpHandler handler)
+Pepe_HttpWorker(Pepe_Arena *arena, i32 s, i32 pid, Pepe_HttpHandler handler)
 {
-  struct sockaddr_in clientAddr;
-  socklen_t addrLen;
-
-  i32 s;
-  addrLen = sizeof(clientAddr);
-  for (;;) {
-    s = accept(l, (struct sockaddr *) &clientAddr, &addrLen);
-    if (s < 0) {
-      perror("accept() call failed");
-      continue;
-    }
-    PEPE_ARENA_CLEAR(arena);
-    Pepe_HttpRespond(arena, s, handler);
-  } 
+  PEPE_ARENA_CLEAR(arena);
+  fprintf(stdout, "pid = %d\n", pid);
+  Pepe_HttpRespond(arena, s, pid, handler);
 }
 
-typedef struct Pepe_HttpWorkers Pepe_HttpWorkers;
-struct Pepe_HttpWorkers {
-  i32 *data;
-  u32 length;
+typedef struct Pepe_HttpFuncBag Pepe_HttpFuncBag;
+struct Pepe_HttpFuncBag {
+  int fd; 
+  int threadIndex;
+  Pepe_HttpHandler handler;
+  Pepe_Arena arena;
 };
 
 void
-Pepe_HttpListenAndServe(Pepe_Arena arena, Pepe_HttpHandler handler, u16 port, Pepe_HttpWorkers workers)
+Pepe_HttpWorkerFunc(Pepe_ThreadPool *pool, void *userdata)
+{
+  struct sockaddr_in clientAddr;
+  socklen_t addrLen;
+  i32 s;
+  
+  Pepe_HttpFuncBag *bag;
+  unused(pool);
+  bag = (Pepe_HttpFuncBag *)userdata;
+
+  printf("worker %d\n", bag->threadIndex);
+  for (;;) {
+    s = accept(bag->fd, (struct sockaddr *) &clientAddr, &addrLen);
+    printf("socket accepted s = %d l = %d", s, bag->fd);
+    Pepe_HttpWorker(&bag->arena, s, bag->threadIndex, bag->handler);
+  }
+}
+
+u64
+Pepe_HttpServer_RequiredMemory(u64 threadCount)
+{
+  return (u64)threadCount * PEPE_WORKER_BUF_SIZE * sizeof(Pepe_HttpFuncBag);
+}
+
+void
+Pepe_HttpListenAndServe(
+    Pepe_ThreadPool *pool,
+    u32 workers,
+    Pepe_Arena *arena, 
+    Pepe_HttpHandler handler, 
+    u16 port
+)
 {
   struct sockaddr_in addr;
 	i32	enable = 1;
-	i32	l, i, pid;
+	i32	l, i;
+  Pepe_HttpFuncBag *bags;
 
   printf("start listening on port %d\n", port);
 
+  bags = (Pepe_HttpFuncBag *)Pepe_ArenaAllocAlign(arena, sizeof(Pepe_HttpFuncBag) * PEPE_HTTP_WORKERS, PEPE_DEFAULT_ALIGNMENT);
+  for (i = 0; (u32)i < workers; i++) {
+    Pepe_Arena_FromBuffer(&bags[i].arena, Pepe_ArenaAllocAlign(arena, PEPE_WORKER_BUF_SIZE, PEPE_DEFAULT_ALIGNMENT), PEPE_WORKER_BUF_SIZE);
+    if (!bags[i].arena.buf) {
+      printf("i = %d\n", i);
+      assert(false);
+    }
+    bags[i].threadIndex = i;
+    bags[i].handler = handler;
+  }
+  
   l = socket(PF_INET, SOCK_STREAM, 0);
   if (l < 0) {
     perror("socket() call failed");
@@ -483,19 +519,11 @@ Pepe_HttpListenAndServe(Pepe_Arena arena, Pepe_HttpHandler handler, u16 port, Pe
   if (listen(l, 128) < 0) {
     perror("listen() call failed");
     return;
+  }  
+  for (i = 0; (u32)i < workers; i++) { 
+    bags[i].fd = l;
+    Pepe_ThreadPool_ScheduleWork(pool, Pepe_HttpWorkerFunc, (void *)(bags + i));
   }
-  for (i = 0; i < (i32)workers.length - 1; i++) {
-    pid = fork();
-    workers.data[i] = pid;
-    if (pid == 0) {
-      break;
-    }
-  }
-  if (pid == 0) {
-    Pepe_HttpWorker(&arena, l, handler);
-  }
-
-  return;
 }
 
 i32

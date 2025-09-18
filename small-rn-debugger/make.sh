@@ -9,7 +9,7 @@ OS="$(uname)"
 
 case $OS in
   'Darwin')
-    LDFLAGS="-Wno-deprecated-declarations -framework CoreVideo -framework Cocoa -framework OpenGL -framework IOKit"
+    LDFLAGS="-Wno-deprecated-declarations -framework CoreVideo -framework Cocoa -framework OpenGL -framework IOKit -pthread -O2"
     ;;
   'Linux')
     LDFLAGS="-lX11 -lGL -lXrandr"
@@ -36,7 +36,7 @@ case $1 in
         lldb -n $BUNDLE/$PROJECT
         ;;
       wait)
-        lldb -n $BUNDLE/$PROJECT-w
+        lldb -n $BUNDLE/$PROJECT -w
         ;;
     esac
     ;;

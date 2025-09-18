@@ -1,6 +1,8 @@
 #ifndef PEPE_CORE_H
 #define PEPE_CORE_H
 
+#define PEPE_INLINE inline
+
 #define MULTILINE_STR(...) #__VA_ARGS__
 #define PEPE_PACKED_ENUM enum __attribute__((__packed__))
 #define max(A, B) ((A) > (B) ? (A) : (B))
@@ -89,6 +91,16 @@ struct Pepe_Arena {
   u64   currentOffset;
   u64   previousOffset; 
 };
+
+void
+Pepe_Arena_FromBuffer(Pepe_Arena *arena, void *buffer, u64 size)
+{
+  assert(arena);
+  arena->previousOffset = 0;
+  arena->currentOffset = 0;
+  arena->size = size;
+  arena->buf  = (u8 *)buffer;
+}
 
 void
 Pepe_ArenaInit(Pepe_Arena *arena, Pepe_Slice slice)
@@ -217,6 +229,15 @@ u16
 Pepe_U16SwapBytes(u16 n)
 {
 	return (n << 8) | ((n & 0xFF00) >> 8);
+}
+
+u32
+Pepe_U32SwapBytes(u32 n)
+{
+  return (u32)((0x000000FF & n) >>  0) |
+         (u32)((0x0000FF00 & n) >>  8) |
+         (u32)((0x00FF0000 & n) >> 16) |
+         (u32)((0xFF000000 & n) >> 24);
 }
 
 u64

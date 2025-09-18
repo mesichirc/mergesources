@@ -15,18 +15,15 @@
 #include "../pepe_http.h"
 #include "../pepe_graphics.h"
 #include "../pepe_websockets.h"
+#include "../pepe_bmp.h"
 
-#define RGFW_ALLOC_DROPFILES
-#define RGFW_IMPLEMENTATION
-#define RGFW_PRINT_ERRORS
-#define RGFW_DEBUG
-#include "../external/RGFW.h"
-#define RGL_LOAD_IMPLEMENTATION
-#include "../external/RGLLoad.h"
-#include "../pepe_gl.h"
+#define SILICON_IMPLEMENTATION
+#include "../external/Silicon.h"
+
+#include "../pepe_threadpool.h"
+
 #include "ui.c"
 
-#define BUF_SIZE 131072 * 2
 
 void
 HandleWebsocketMessage(Pepe_HttpRequest *request, Pepe_HttpResponse *response)
@@ -44,7 +41,7 @@ HandleWebsocketMessage(Pepe_HttpRequest *request, Pepe_HttpResponse *response)
   i64 rcvd;
   i32 fptr;
   
-  fptr = open("logs", O_APPEND | O_CREAT | O_RDWR);
+  fptr = open("logs", O_APPEND | O_CREAT | O_RDWR, 0);
   memory = Pepe_SliceInit(PEPE_ARENA_ALLOC(response->arena, 14), 14);
   messageBuf = Pepe_SliceInit(PEPE_ARENA_ALLOC(response->arena, 1024), 1024);
   messageBuf.length = 0;
@@ -74,7 +71,7 @@ HandleWebsocketMessage(Pepe_HttpRequest *request, Pepe_HttpResponse *response)
     } else if (size == 127) {
       extra += 8;
     }
-
+  
     if (extra > 0) {
       buf = Pepe_SliceLeft(Pepe_SliceRight(memory, 2), extra);
       rcvd = Pepe_ReadFromConnection(request, buf);
@@ -131,7 +128,7 @@ HandleWebsocketMessage(Pepe_HttpRequest *request, Pepe_HttpResponse *response)
       break;
     } else if (fin == 1) {
       write(fptr, (u8 *)messageBuf.base, (u32)messageBuf.length);
-      printf("message: %.*s", (u32)messageBuf.length, (u8 *)messageBuf.base);
+      printf("%.*s", (u32)messageBuf.length, (u8 *)messageBuf.base);
       fsync(fptr);
       messageBuf.length = 0;
     }  
@@ -155,31 +152,65 @@ HandleHttpRequest(Pepe_HttpRequest *request, Pepe_HttpResponse *response, void *
   }
 }
 
+/*
+void 
+testFontBakery(void)
+{
+  u64 bitmapSize, backedFontSize, arenaSize;
+  Pepe_Slice arenaMemory;
+  Pepe_Slice fontMemory, backedFontMemory, bitmapMemory;
+  Pepe_Arena arena;
+
+  arenaSize = 1024 * 1024 * 2;
+  arenaMemory = Pepe_SliceInit(mmap(nil, arenaSize, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0), arenaSize);
+
+  Pepe_ArenaInit(&arena, arenaMemory);
+
+  fontMemory = Pepe_IO_ReadEntireFileFromPathDebug(arena, "../fonts/ProggyVector-Regular.ttf");
+  assert(fontMemory.base);
+
+  backedFontSize = 512 * 512;
+  backedFontMemory = Pepe_SliceInit(PEPE_ARENA_ALLOC(&arena, backedFontSize), backedFontSize);
+
+  stbtt_BakeFontBitmap(fontMemory.base, 0, 32.0, (u8 *)backedFontMemory.base, 512, 512, 32, 96, );
+
+
+  Pepe_SliceInit() 
+}
+*/
+
 i32
 main(i32 argc, char **argv)
 {
   unused(argc);
   unused(argv);
+  Pepe_ThreadPool *pool;
   u64 requredMemory;
-  Pepe_Slice arenaMemory;
+  void *threadPoolBuffer;
+  u64 threadPoolMemorySize;
+  void *arenaMemory;
   Pepe_Arena arena;
   Pepe_HttpHandler handler;
-  Pepe_HttpWorkers httpWorkers;
+  threadPoolMemorySize = Pepe_ThreadPool_RequiredMemory(PEPE_HTTP_WORKERS - 1);
   // i32 pidIndex;
-  i32 workersData[4]; 
-  httpWorkers.length = 4;
-  httpWorkers.data = workersData;
-  requredMemory = BUF_SIZE;
-  arenaMemory = Pepe_SliceInit(mmap(nil, requredMemory, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0), requredMemory);
+  u64 size = Pepe_HttpServer_RequiredMemory(PEPE_HTTP_WORKERS);
+  requredMemory = (u64)Pepe_AlignForward(size + (uptr)threadPoolMemorySize, PEPE_DEFAULT_ALIGNMENT);
 
-  Pepe_ArenaInit(&arena, arenaMemory);
+  arenaMemory = mmap(nil, requredMemory, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
+
+  Pepe_Arena_FromBuffer(&arena, arenaMemory, requredMemory);
   handler.userdata = nil;
   handler.handle = HandleHttpRequest;
 
-  Pepe_HttpListenAndServe(arena, handler, 8080, httpWorkers);
+  pool = (Pepe_ThreadPool *)Pepe_ArenaAllocAlign(&arena, sizeof(Pepe_ThreadPool), PEPE_DEFAULT_ALIGNMENT);
+  threadPoolMemorySize = Pepe_ThreadPool_RequiredMemory(PEPE_HTTP_WORKERS);
+  threadPoolBuffer = Pepe_ArenaAllocAlign(&arena, (u32)threadPoolMemorySize, PEPE_DEFAULT_ALIGNMENT);
+  Pepe_ThreadPool_Init(pool, PEPE_HTTP_WORKERS, threadPoolBuffer, (u32)threadPoolMemorySize);
+
+  Pepe_HttpListenAndServe(pool, PEPE_HTTP_WORKERS - 1, &arena, handler, 9000);
   
-  UIHandle(&arena); 
-  for (u32 i = 0; i < httpWorkers.length; i++) {
-    kill(httpWorkers.data[i], SIGTERM);
+  for (;;) {
   }
+  // UIHandle(pool); 
+  return 0;
 }
