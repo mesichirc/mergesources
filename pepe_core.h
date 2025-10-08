@@ -112,6 +112,20 @@ Pepe_ArenaInit(Pepe_Arena *arena, Pepe_Slice slice)
   arena->buf  = (u8 *)slice.base;
 }
 
+void
+Pepe_Arena_FromCBuffer(
+    Pepe_Arena *arena,
+    void *buffer,
+    u32  length
+)
+{
+  assert(arena);
+  assert(buffer);
+  Pepe_ArenaInit(
+      arena,
+      Pepe_SliceInit(buffer, (u64)length)
+  );
+}
 
 #define IS_POWER_OF_TWO(x) (((x) & ((x) - 1)) == 0)
 

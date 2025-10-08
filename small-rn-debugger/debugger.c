@@ -16,10 +16,12 @@
 #include "../pepe_graphics.h"
 #include "../pepe_websockets.h"
 #include "../pepe_bmp.h"
+#include "../pepe_io.h"
 
 #define SILICON_IMPLEMENTATION
 #include "../external/Silicon.h"
-
+#define  STB_TRUETYPE_IMPLEMENTATION
+#include "../external/stb_truetype.h"
 #include "../pepe_threadpool.h"
 
 #include "ui.c"
@@ -152,33 +154,6 @@ HandleHttpRequest(Pepe_HttpRequest *request, Pepe_HttpResponse *response, void *
   }
 }
 
-/*
-void 
-testFontBakery(void)
-{
-  u64 bitmapSize, backedFontSize, arenaSize;
-  Pepe_Slice arenaMemory;
-  Pepe_Slice fontMemory, backedFontMemory, bitmapMemory;
-  Pepe_Arena arena;
-
-  arenaSize = 1024 * 1024 * 2;
-  arenaMemory = Pepe_SliceInit(mmap(nil, arenaSize, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0), arenaSize);
-
-  Pepe_ArenaInit(&arena, arenaMemory);
-
-  fontMemory = Pepe_IO_ReadEntireFileFromPathDebug(arena, "../fonts/ProggyVector-Regular.ttf");
-  assert(fontMemory.base);
-
-  backedFontSize = 512 * 512;
-  backedFontMemory = Pepe_SliceInit(PEPE_ARENA_ALLOC(&arena, backedFontSize), backedFontSize);
-
-  stbtt_BakeFontBitmap(fontMemory.base, 0, 32.0, (u8 *)backedFontMemory.base, 512, 512, 32, 96, );
-
-
-  Pepe_SliceInit() 
-}
-*/
-
 i32
 main(i32 argc, char **argv)
 {
@@ -209,8 +184,6 @@ main(i32 argc, char **argv)
 
   Pepe_HttpListenAndServe(pool, PEPE_HTTP_WORKERS - 1, &arena, handler, 9000);
   
-  for (;;) {
-  }
-  // UIHandle(pool); 
+  UIHandle(&arena); 
   return 0;
 }
