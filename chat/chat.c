@@ -125,10 +125,9 @@ ChatInputKeyCodesDebugInit(void) {
 }
 
 
-
 bool ChatInputKeyPressed(ChatInputHandle input, ChatKeyCode keyCode)
 {
-  return (input.newInput->flag & ChatKeyPressedFlag) && (input.newInput->keyCodes[keyCode]);
+  return input.newInput->keyCodes[keyCode];
 }
 
 bool ChatInputKeyJustPressed(ChatInputHandle input, ChatKeyCode keyCode)
@@ -136,11 +135,49 @@ bool ChatInputKeyJustPressed(ChatInputHandle input, ChatKeyCode keyCode)
   return ChatInputKeyPressed(input, keyCode) && !(input.prevInput->keyCodes[keyCode]);
 }
 
-void 
-ChatUpdateAndRender(Pepe_Bitmap *canvas, ChatInputHandle input)
-{
-  unused(canvas);
+typedef struct ChatState ChatState;
+struct ChatState {
+  u32 x;
+  u32 y;
+};
+static ChatState globalState;
 
-  ChatInputPrint(input.newInput); 
+void 
+MoveByAxis(u32 *axis, u32 size, int delta) 
+{
+  u32 absDelta = (u32)(delta > 0 ? delta : -delta);
+  if (delta < 0 && *axis < absDelta) {
+    *axis = size - absDelta;
+    return;
+  }
+  *axis = *axis + delta;
+  *axis = *axis % size;
+}
+
+void
+ClearCanvas(Pepe_Bitmap *canvas)
+{
+  Pepe_DrawOpaqueRect(canvas, 0, 0, canvas->width, canvas->height, PEPE_COLOR_WHITE);
+}
+
+void 
+ChatUpdateAndRender(Pepe_Bitmap *canvas, ChatInputHandle input, Pepe_Bitmap *defaultFont)
+{
+  ClearCanvas(canvas);
+  if (ChatInputKeyPressed(input, ChatKeyCodeD) || ChatInputKeyPressed(input, ChatKeyCodeRight)) {
+    MoveByAxis(&globalState.x, canvas->width, 5);
+  }
+  if (ChatInputKeyPressed(input, ChatKeyCodeA) || ChatInputKeyPressed(input, ChatKeyCodeLeft)) {
+    MoveByAxis(&globalState.x, canvas->width, -5);
+  }
+  if (ChatInputKeyPressed(input, ChatKeyCodeW) || ChatInputKeyPressed(input, ChatKeyCodeUp)) {
+    MoveByAxis(&globalState.y, canvas->height, -5);
+  }
+  if (ChatInputKeyPressed(input, ChatKeyCodeS) || ChatInputKeyPressed(input, ChatKeyCodeDown)) {
+    MoveByAxis(&globalState.y, canvas->height, 5);
+  }
+
+  Pepe_DrawRectWrapped(canvas, globalState.x, globalState.y, 100, 100, PEPE_COLOR_BLACK);
+  Pepe_Draw1ChannelBitmap(canvas, 0, 100, PEPE_COLOR_BLACK, *defaultFont);
 }
 

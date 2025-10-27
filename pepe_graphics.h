@@ -10,8 +10,8 @@ struct Pepe_Color {
 
 typedef struct Pepe_Rect Pepe_Rect;
 struct Pepe_Rect {
-  u32 x;
-  u32 y;
+  i32 x;
+  i32 y;
   u32 w;
   u32 h;
 };
@@ -23,6 +23,8 @@ struct Pepe_Bitmap {
   u32 width;
   u32 height;
   u32 pitch;
+  u16 bytesPerPixel;
+  u16 scale;
 };
 
 typedef f32 Pepe_GF32Vec2[2];
@@ -172,7 +174,7 @@ Pepe_Smoothstep(i32 e0, i32 e1, i32 value)
 }
 
 void
-Pepe_ClipPoint(u32 point[2], u32 leftX, u32 leftY, u32 rightX, u32 rightY)
+Pepe_ClipPoint(i32 point[2], i32 leftX, i32 leftY, i32 rightX, i32 rightY)
 {
   point[0] = Pepe_ClipU32(point[0], leftX, rightX);
   point[1] = Pepe_ClipU32(point[1], leftY, rightY);
@@ -184,8 +186,8 @@ Pepe_ClipRect(
     Pepe_Rect clip
 )
 {  
-  u32 origin[2];
-  u32 bottomRight[2];
+  i32 origin[2];
+  i32 bottomRight[2];
   origin[0] = rect->x;
   origin[1] = rect->y;
 
@@ -201,13 +203,22 @@ Pepe_ClipRect(
   rect->h = bottomRight[1] - origin[1];
 }
 
+inline u32
+Pepe_AbsoluteValue(i32 v)
+{
+  u32 result;
+  i32 mask = (v >> sizeof(i32)) - 1;
+  result = (v + mask) ^ mask;
+
+  return result;
+}
 
 Pepe_Rect
-Pepe_ClipByCanvas(Pepe_Bitmap *canvas, u32 x, u32 y, u32 w, u32 h)
+Pepe_ClipByCanvas(Pepe_Bitmap *canvas, i32 x, i32 y, u32 w, u32 h)
 {
   Pepe_Rect rect, clip;
-  rect.x = x;
-  rect.y = y;
+  rect.x = (x < 0 ? canvas->width + x : x);
+  rect.y = (y < 0 ? canvas->height + y : y);
   rect.w = w;
   rect.h = h;
 
@@ -220,6 +231,12 @@ Pepe_ClipByCanvas(Pepe_Bitmap *canvas, u32 x, u32 y, u32 w, u32 h)
   return rect;
 }
 
+inline u32
+Pepe_GetPixel(u32 x, u32 y, u32 pitch, u32 scale)
+{
+  return (x + y * pitch * scale);
+}
+
 void
 Pepe_DrawOpaqueRect(
     Pepe_Bitmap *canvas, 
@@ -229,9 +246,6 @@ Pepe_DrawOpaqueRect(
 )
 {
   Pepe_Rect rect;
-  u32 currentPixel;
-  u32 endPixel;
-  u32 row;
   u32 *memory;
 
   rect = Pepe_ClipByCanvas(canvas, x, y, width, height);
@@ -240,18 +254,10 @@ Pepe_DrawOpaqueRect(
     return;
   }
 
-  currentPixel = canvas->width * rect.y + rect.x;
-  endPixel = canvas->width * (rect.y + rect.h - 1) + rect.x + rect.w;
-
-  row = 0;
   memory = (u32*)canvas->memory;
-  while (currentPixel < endPixel) {
-    memory[currentPixel] = color.value;
-    currentPixel++;
-    row++;
-    if (row == rect.w) {
-      currentPixel += (canvas->width - rect.w);
-      row = 0;
+  for (u32 y = rect.y * canvas->scale; y < (rect.y + rect.h) * canvas->scale; y ++) {
+    for (u32 x = rect.x * canvas->scale; x < (rect.x + rect.w) * canvas->scale; x++) {
+      memory[Pepe_GetPixel(x, y, canvas->pitch, canvas->scale)] = color.value;
     }
   }
 }
@@ -264,33 +270,52 @@ Pepe_DrawRect(
     Pepe_Color color // ABGR 
 )
 {
+  u32 *memory;
   Pepe_Color c1;
   Pepe_Rect rect;
-  u32 currentPixel;
-  u32 endPixel;
-  u32 row;
-  u32 *memory;
 
   rect = Pepe_ClipByCanvas(canvas, x, y, width, height);
 
   if (rect.w == 0 || rect.h == 0) {
     return;
   }
-
-  currentPixel = canvas->width * rect.y + rect.x;
-  endPixel = canvas->width * (rect.y + rect.h - 1) + rect.x + rect.w;
-
-  row = 0;
   memory = (u32*)canvas->memory;
-  while (currentPixel < endPixel) {
-    c1.value = memory[currentPixel];
-    memory[currentPixel] = Pepe_MixColors(c1, color).value;
-    currentPixel++;
-    row++;
-    if (row == rect.w) {
-      currentPixel += (canvas->width - rect.w);
-      row = 0;
+  for (u32 y = rect.y * canvas->scale; y < (rect.y + rect.h) * canvas->scale; y ++) {
+    for (u32 x = rect.x * canvas->scale; x < (rect.x + rect.w) * canvas->scale; x++) {
+      u32 pixel = Pepe_GetPixel(x, y, canvas->pitch, canvas->scale);
+      c1.value = memory[pixel];
+      memory[pixel] = Pepe_MixColors(c1, color).value;
     }
+  }
+}
+
+void
+Pepe_DrawRectWrapped(
+    Pepe_Bitmap *canvas, 
+    i32 x, i32 y,
+    u32 width, u32 height, 
+    Pepe_Color color // ABGR 
+)
+{
+  Pepe_Rect rect;
+
+  rect = Pepe_ClipByCanvas(canvas, x, y, width, height);
+
+  Pepe_DrawRect(canvas, x, y, width, height, color);
+  if (rect.w == width && rect.h == height) {
+    return;
+  }
+
+  if (y + height > canvas->height && x + width > canvas->width) {
+    Pepe_DrawRect(canvas, 0, 0, width - rect.w, height - rect.h, color);
+    return;
+  }
+
+  if (y + height > canvas->height) {
+    Pepe_DrawRect(canvas, x, 0, width, height - rect.h, color);
+  }
+  if (x + width > canvas->width) {
+    Pepe_DrawRect(canvas, 0, y, width - rect.w, height, color);
   }
 }
 
@@ -370,7 +395,6 @@ Pepe_Draw4ChannelBitmap(
   } 
 }
 
-
 void
 Pepe_Draw1ChannelBitmap(
     Pepe_Bitmap *canvas,
@@ -382,25 +406,20 @@ Pepe_Draw1ChannelBitmap(
   u32 x, y;
   Pepe_Rect rect;
   u32 *pixels;
-  u32 *sourceDest;
-  u8  *bitmapPixels;
+  u8 *bitmapPixels;
   rect = Pepe_ClipByCanvas(canvas, x0, y0, bitmap.width, bitmap.height);
   pixels = (u32 *)canvas->memory;
   bitmapPixels = (u8 *)bitmap.memory;
-
-  pixels += canvas->width * y0 + x0;
-  sourceDest = pixels; 
   
   for (y = 0; y < rect.h; y++) {
     for (x = 0; x < rect.w; x++) {
-      *sourceDest = Pepe_MixColorsU32(
-          *sourceDest, 
-          Pepe_ColorSetAlpha(color, *bitmapPixels).value);
-      sourceDest++;
-      bitmapPixels++;
+      u32 sourcePixel = Pepe_GetPixel(x0 + x, y0 + y, canvas->pitch, canvas->scale);
+      u32 destPixel = Pepe_GetPixel(x, y, bitmap.pitch, bitmap.scale);
+      pixels[sourcePixel] = Pepe_MixColorsU32(
+          pixels[sourcePixel],
+          Pepe_ColorSetAlpha(color, bitmapPixels[destPixel]).value
+      );
     }
-    pixels += canvas->width;
-    sourceDest = pixels;
   } 
 }
 

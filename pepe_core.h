@@ -263,4 +263,41 @@ Pepe_U64SwapBytes(u64 n)
            (u64)n <<  8 | (u64)n <<  0;
 }
 
+typedef struct Pepe_UTF8Iterator Pepe_UTF8Iterator;
+struct Pepe_UTF8Iterator {
+  u8  *chars;
+  u32 size;
+  u32 indx;
+};
+
+bool
+Pepe_UTF8IteratorDone(Pepe_UTF8Iterator *iterator)
+{
+  return iterator->indx < iterator->size;
+}
+
+u32
+Pepe_UTF8IteratorNext(Pepe_UTF8Iterator *iterator)
+{
+  u32 result;
+  u8* chars;
+  u32 n;
+  chars = iterator->chars + iterator->index;
+  switch (*chars & 0xf0) {
+    case 0xf0 : result = *chars & 0x07; n = 3; break;
+    case 0xe0 : result = *chars & 0x0f; n = 2; break;
+    case 0xd0 :
+    case 0xc0 : result = *chars & 0x1f; n = 1; break;
+    default   : result = *chars; n = 0; break;
+  }
+
+  while (n--) {
+    iterator->indx++;
+    result = (result << 6) | (*(++chars) & 0x3f);
+  }
+
+  iterator->indx++;
+  return result;
+}
+
 #endif

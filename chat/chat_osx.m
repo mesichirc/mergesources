@@ -1,36 +1,71 @@
 #import <AppKit/AppKit.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/_types/_useconds_t.h>
+#include <CoreGraphics/CGImage.h>
+#include <objc/NSObjCRuntime.h>
+#include <sys/mman.h>
 #import <IOKit/hid/IOHIDLib.h>
 #include <mach/mach_init.h>
 #include <mach/mach_time.h>
 #include "../u.h"
+#include "../pepe_core.h"
+#include "../pepe_io.h"
 #include "../pepe_graphics.h"
 #include "chat.h"
 #include "chat.c"
 #include <stdint.h>
+#define  STB_TRUETYPE_IMPLEMENTATION
+#include "../external/stb_truetype.h"
 
-mach_timebase_info_data_t globalPerfCountFrequency;
 int bytesPerPixel = 4;
 bool running = true;
+Pepe_Bitmap canvas;
+
+#define global_variable static
+
+global_variable mach_timebase_info_data_t globalPerfCountFrequency;
+
+static f32
+macOsGetSecondsElapsed(u64 start, u64 end)
+{
+  u64 elapsed = end - start;
+  f32 result = (f32)(elapsed * (globalPerfCountFrequency.numer / globalPerfCountFrequency.denom)) / 1000.0f / 1000.0f / 1000.0f;
+  return result;
+}
+
+NSImage*
+macosGetImage(Pepe_Bitmap *canvas)
+{
+  @autoreleasepool {
+    // Desired size in points
+    // Actual pixel size for Retina display
+    assert(canvas->memory);
+    NSBitmapImageRep *rep = [[[NSBitmapImageRep alloc] initWithBitmapDataPlanes: &canvas->memory
+                                    pixelsWide: canvas->width * canvas->scale
+                                    pixelsHigh: canvas->height * canvas->scale
+                                    bitsPerSample: 8
+                                    samplesPerPixel: 4
+                                    hasAlpha: YES
+                                    isPlanar: NO
+                                    colorSpaceName: NSDeviceRGBColorSpace
+                                    bytesPerRow: (f32)(canvas->pitch * canvas->scale * canvas->bytesPerPixel)
+                                    bitsPerPixel: bytesPerPixel * 8] autorelease];
+
+    NSImage *image = [[NSImage alloc] initWithSize:NSMakeSize(canvas->width, canvas->height)];
+    [image addRepresentation:rep];
+
+    return image;
+  }
+}
 
 void 
 macosRedrawBuffer(NSWindow *window, Pepe_Bitmap *bitmap)
-{
+{ 
   @autoreleasepool {
-    u8* plane = bitmap->memory;
-    NSBitmapImageRep *rep = [[[NSBitmapImageRep alloc] initWithBitmapDataPlanes: &plane 
-                                  pixelsWide: bitmap->width
-                                  pixelsHigh: bitmap->height
-                                  bitsPerSample: 8
-                                  samplesPerPixel: 4
-                                  hasAlpha: YES
-                                  isPlanar: NO
-                                  colorSpaceName: NSDeviceRGBColorSpace
-                                  bytesPerRow: bitmap->pitch
-                                  bitsPerPixel: bytesPerPixel * 8] autorelease];
-    NSSize imageSize = NSMakeSize(bitmap->width, bitmap->height);
-    NSImage *image = [[[NSImage alloc] initWithSize: imageSize] autorelease];
-    [image addRepresentation: rep];
-    window.contentView.layer.contents = image;
+    NSImage *image = macosGetImage(bitmap);
+    [window.contentView.layer setContents:image];
+    [window.contentView.layer setNeedsDisplay];
   }
 }
 
@@ -47,6 +82,11 @@ macosRedrawBuffer(NSWindow *window, Pepe_Bitmap *bitmap)
 @end
 
 @implementation ChatMainWindow 
+
+- (BOOL)acceptsFirstResponder {
+    return YES;
+}
+
 @end
 
 #define ARRAY_LENGTH(arr) (sizeof(arr) / sizeof(arr[0]))
@@ -178,31 +218,92 @@ macosGetKeyCode(u16 keyCode)
   }
 }
 
+void
+resizeCanvas(NSWindow *window, Pepe_Bitmap *bitmap)
+{
+  u32 scale = (u32)(window.screen.backingScaleFactor);
+  u32 width = (u32)(window.frame.size.width);
+  u32 height = (u32)(window.frame.size.height);
+  if (width != bitmap->width || height != bitmap->height || !bitmap->memory) {
+    if (bitmap->memory != nil) {
+      munmap((void *)bitmap->memory, (u64)bitmap->height * scale * (u64)bitmap->pitch * scale);
+    }
+
+    void *memory = mmap(nil, bytesPerPixel * width * height * scale * scale, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
+    assert(memory);
+    bitmap->scale = scale;
+    bitmap->width = width;
+    bitmap->pitch = width;
+    bitmap->bytesPerPixel = bytesPerPixel;
+    bitmap->height = height;
+    bitmap->memory = (u8*)memory;
+  }
+}
+
+stbtt_bakedchar cdata[186];
+Pepe_Bitmap
+LoadDefaultFont(Pepe_Arena *arena, f32 scale)
+{
+  Pepe_Slice fontMemory;
+  u32 bitmapSize = 512 * 512;
+  Pepe_Bitmap result;
+
+  fontMemory = Pepe_IO_ReadEntireFileFromPathDebug("../fonts/ProggyVector-Regular.ttf");
+  assert(fontMemory.base);
+  printf("font readed %llu\n", fontMemory.length);
+  result.memory = (u8 *)PEPE_ARENA_ALLOC(arena, bitmapSize);
+  result.width = 512;
+  result.height = 512;
+  result.pitch = 1;
+  assert(result.memory);
+  i32 status = stbtt_BakeFontBitmap(fontMemory.base, 0, 24.0 * scale, (void*)result.memory, 512, 512, 32, 96, cdata);
+
+  printf("stbtt_BakeFontBitmap result = %d\n", status);
+
+  return result; 
+}
+
+#define Kilobytes(Bytes) (1024 * (Bytes))
+#define Megabytes(Bytes) (1024 * Kilobytes(Bytes))
+#define Gigabytes(Bytes) (1024 * Megabytes(Bytes))
+
 int 
 main(int argc, const char * argv[])
 {
   unused(argc);
   unused(argv);
+  Pepe_Arena globalArena;
+  void *globalArenaMemory;
+  u64 globalArenaMemorySize = Megabytes((u64)64);
+  globalArenaMemory = mmap(nil, globalArenaMemorySize, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
+  
+  Pepe_Arena_FromCBuffer(&globalArena, globalArenaMemory, globalArenaMemorySize);
+  mach_timebase_info(&globalPerfCountFrequency);
   ChatInputKeyCodesDebugInit();
   mach_timebase_info(&globalPerfCountFrequency);
   ChatMainWindowDelegate *mainWindowDelegate = [[ChatMainWindowDelegate alloc] init];
 
-  // NSRect screenRect = [[NSScreen mainScreen] frame];
+  NSRect screenRect = [[NSScreen mainScreen] frame];
 
   ChatInput chatInputs[2];
   memset(chatInputs, 0, sizeof(ChatInput) * 2);
+  memset(&canvas, 0, sizeof(Pepe_Bitmap));
   u32 prevInput = 0;
   u32 input = 1;
 
   f32 width = 1024;
   f32 height = 768;
-  NSRect initialFrame = NSMakeRect(0, 0, width, height);
+  NSRect initialFrame = NSMakeRect(0, screenRect.size.height, width, height);
   NSWindow *window = [[ChatMainWindow alloc]
                       initWithContentRect: initialFrame
                       styleMask: NSWindowStyleMaskTitled | NSWindowStyleMaskClosable
                       backing: NSBackingStoreBuffered
                       defer:NO];
 
+  Pepe_Bitmap defaultFont = LoadDefaultFont(&globalArena, window.screen.backingScaleFactor);
+  defaultFont.bytesPerPixel = 1;
+  defaultFont.scale = 1;
+  defaultFont.pitch = defaultFont.width;
   [[NSApplication sharedApplication] activateIgnoringOtherApps:true];
   [[NSApplication sharedApplication] setActivationPolicy:NSApplicationActivationPolicyRegular];
   [window setBackgroundColor: NSColor.blackColor];
@@ -212,84 +313,140 @@ main(int argc, const char * argv[])
   [window orderFront:nil];
   [window setDelegate: mainWindowDelegate];
   [[NSApplication sharedApplication] finishLaunching];
-  // 1 frame keycodes [0, 0, 1]
-  // 2 frame keycodes [0, 0, 0]
-  // 3 frame keycodes [0, 0, 1]
   ChatInput *chatInput;
   ChatInputHandle inputHandle;
   window.contentView.wantsLayer = YES;
-  for (;running;) {
-        inputHandle.newInput = chatInputs + input;
-        inputHandle.prevInput = chatInputs + prevInput;
-        ChatUpdateAndRender(nil, inputHandle);
-        prevInput = input;
-        input = (input + 1) & 1;
-        chatInput = chatInputs + input;
-        memcpy(&chatInput->keyCodes, (chatInputs + prevInput)->keyCodes, sizeof(chatInput->keyCodes));
-        ChatInputClear(chatInput);
-        NSEvent* event;
-        do {
-            event = [NSApp nextEventMatchingMask: NSEventMaskAny
-                                       untilDate: nil
-                                          inMode: NSDefaultRunLoopMode
-                                         dequeue: YES];
-           
-            switch ([event type]) {
-              case NSEventTypeKeyDown:
-                chatInput->flag |= ChatKeyPressedFlag; 
-                chatInput->keyCodes[macosGetKeyCode(event.keyCode)] = 1;
-                assert(chatInput->charactersLength + event.characters.cStringLength < ARRAY_LENGTH(chatInput->characters));
-                memcpy(chatInput->characters + chatInput->charactersLength, event.characters.UTF8String, strlen(event.characters.UTF8String)); 
-                chatInput->charactersLength += strlen(event.characters.UTF8String);
-                break;
-              case NSEventTypeKeyUp:
-                chatInput->flag |= ChatKeyReleasedFlag;
-                chatInput->keyCodes[macosGetKeyCode(event.keyCode)] = 0;
-                printf("key released = %d\n", macosGetKeyCode(event.keyCode));
-                break;
-              case NSEventTypeLeftMouseDown:
-                chatInput->flag |= ChatMouseBtnPressedFlag;
-                chatInput->mouseButtonsState[0] = 1;
-                break;
-              case NSEventTypeLeftMouseUp:
-                chatInput->flag |= ChatMouseBtnReleasedFlag;
-                chatInput->mouseButtonsState[0] = 0;
-                break;
-              case NSEventTypeRightMouseDown:
-                chatInput->flag |= ChatMouseBtnPressedFlag;
-                chatInput->mouseButtonsState[1] = 1;
-                break;
-              case NSEventTypeRightMouseUp:
-                chatInput->flag |= ChatMouseBtnReleasedFlag;
-                chatInput->mouseButtonsState[1] = 0;
-                break;
-              case NSEventTypeOtherMouseDown:
-                chatInput->flag |= ChatMouseBtnPressedFlag;
-                chatInput->mouseButtonsState[event.buttonNumber] = 1;
-                break;
-              case NSEventTypeOtherMouseUp:
-                chatInput->flag |= ChatMouseBtnReleasedFlag;
-                chatInput->mouseButtonsState[event.buttonNumber] = 0;
-                break;
-              case NSEventTypeScrollWheel:
-                chatInput->flag |= ChatMouseScrollFlag;
-                chatInput->deltaX = event.deltaX;
-                chatInput->deltaY = event.deltaY;
-                break;
-              case NSEventTypeMouseMoved:
-                chatInput->flag |= ChatMousePositionChangedFlag;
-                chatInput->mouseX = (int)(window.mouseLocationOutsideOfEventStream.x + 0.5);
-                chatInput->mouseY = (int)(window.frame.size.height - window.mouseLocationOutsideOfEventStream.y + 0.5);
-                break;
-              default:
-                break;
-            }
 
-            switch ([event type]) {
-              default:         
-                [NSApp sendEvent: event];
-            }
-        } while (event != nil);
+
+  u32 monitorRefreshHZ = 60;
+  u32 appUpdateHZ = monitorRefreshHZ / 2;
+  f32 targetSecondsPerFrame = 1.0f / (f32)appUpdateHZ;
+  u64 currentTime = mach_absolute_time();
+  u64 lastCounter = currentTime;
+  f32 frameTime = 0.0f;
+
+  for (;running;) {
+    resizeCanvas(window, &canvas);
+    inputHandle.newInput = chatInputs + input;
+    inputHandle.prevInput = chatInputs + prevInput;
+    ChatUpdateAndRender(&canvas, inputHandle, &defaultFont);
+    prevInput = input;
+    input = (input + 1) & 1;
+    chatInput = chatInputs + input;
+    memcpy(&chatInput->keyCodes, (chatInputs + prevInput)->keyCodes, sizeof(chatInput->keyCodes));
+    ChatInputClear(chatInput);
+    NSEvent* event;
+    do {
+        event = [NSApp nextEventMatchingMask: NSEventMaskAny
+                                   untilDate: nil
+                                      inMode: NSDefaultRunLoopMode
+                                     dequeue: YES];
+       
+        switch ([event type]) {
+          case NSEventTypeKeyDown:
+            chatInput->flag |= ChatKeyPressedFlag; 
+            chatInput->keyCodes[macosGetKeyCode(event.keyCode)] = 1;
+            assert(chatInput->charactersLength + event.characters.cStringLength < ARRAY_LENGTH(chatInput->characters));
+            memcpy(chatInput->characters + chatInput->charactersLength, event.characters.UTF8String, strlen(event.characters.UTF8String)); 
+            chatInput->charactersLength += strlen(event.characters.UTF8String);
+            break;
+          case NSEventTypeKeyUp:
+            chatInput->flag |= ChatKeyReleasedFlag;
+            chatInput->keyCodes[macosGetKeyCode(event.keyCode)] = 0;
+            printf("key released = %d\n", macosGetKeyCode(event.keyCode));
+            break;
+          case NSEventTypeLeftMouseDown:
+            chatInput->flag |= ChatMouseBtnPressedFlag;
+            chatInput->mouseButtonsState[0] = 1;
+            break;
+          case NSEventTypeLeftMouseUp:
+            chatInput->flag |= ChatMouseBtnReleasedFlag;
+            chatInput->mouseButtonsState[0] = 0;
+            break;
+          case NSEventTypeRightMouseDown:
+            chatInput->flag |= ChatMouseBtnPressedFlag;
+            chatInput->mouseButtonsState[1] = 1;
+            break;
+          case NSEventTypeRightMouseUp:
+            chatInput->flag |= ChatMouseBtnReleasedFlag;
+            chatInput->mouseButtonsState[1] = 0;
+            break;
+          case NSEventTypeOtherMouseDown:
+            chatInput->flag |= ChatMouseBtnPressedFlag;
+            chatInput->mouseButtonsState[event.buttonNumber] = 1;
+            break;
+          case NSEventTypeOtherMouseUp:
+            chatInput->flag |= ChatMouseBtnReleasedFlag;
+            chatInput->mouseButtonsState[event.buttonNumber] = 0;
+            break;
+          case NSEventTypeScrollWheel:
+            chatInput->flag |= ChatMouseScrollFlag;
+            chatInput->deltaX = event.deltaX;
+            chatInput->deltaY = event.deltaY;
+            break;
+          case NSEventTypeMouseMoved:
+            chatInput->flag |= ChatMousePositionChangedFlag;
+            chatInput->mouseX = (int)(window.mouseLocationOutsideOfEventStream.x + 0.5);
+            chatInput->mouseY = (int)(window.frame.size.height - window.mouseLocationOutsideOfEventStream.y + 0.5);
+            break;
+          default:
+            break;
+        }
+
+        if ([event type]) {
+          if ([event type] != NSEventTypeKeyDown && [event type] != NSEventTypeKeyUp) {
+            [NSApp sendEvent:event];
+          }
+        }
+        if (chatInput->keyCodes[ChatKeyCodeQ] && (event.modifierFlags & NSEventModifierFlagCommand)) {
+          running = false;
+        }
+
+    } while (event != nil);
+
+
+    u64 workCounter = mach_absolute_time();
+    f32 workSecondsElapsed = macOsGetSecondsElapsed(lastCounter, workCounter);
+    f32 secondsElapsedForFrame = workSecondsElapsed;
+
+    if (secondsElapsedForFrame < targetSecondsPerFrame) {
+      f32 underOffset = 3.0f / 1000.0f;
+      useconds_t sleepMs = (useconds_t)(1000.0f * 1000.0f * (targetSecondsPerFrame - secondsElapsedForFrame - underOffset));
+      if (sleepMs > 0) {
+        usleep(sleepMs);
+      }
+
+      f32 testSecondsElapsedForFrame = macOsGetSecondsElapsed(lastCounter,
+              mach_absolute_time());
+      if(testSecondsElapsedForFrame < targetSecondsPerFrame)
+      {
+        // printf("testSecondsElapsedForFrame < targetSecondsPerFrame, %f < %f\n", testSecondsElapsedForFrame, targetSecondsPerFrame);
+      }
+      while (secondsElapsedForFrame < targetSecondsPerFrame) {
+        secondsElapsedForFrame = macOsGetSecondsElapsed(lastCounter, mach_absolute_time());
+      }
+    } else {
+      printf("Missed frame rate %f\n", secondsElapsedForFrame);
+    }
+
+    u64 endOfFrame = mach_absolute_time();
+    u64 frameElapsed = endOfFrame - lastCounter;
+    u64 frameNanoseconds = frameElapsed * globalPerfCountFrequency.numer / globalPerfCountFrequency.denom;
+    f32 measuredMillsecondsPerFrame = (f32)frameNanoseconds * 1.0E-6f;
+    f32 measuredSecondsPerFrame = (f32)frameNanoseconds * 1.0E-9f;
+    f32 measuredFramesPerSecond = 1.0f / measuredSecondsPerFrame;
+
+    unused(measuredFramesPerSecond);
+    unused(measuredMillsecondsPerFrame);
+    //printf("Frames Per Second %f\n", measuredFramesPerSecond);
+    //printf("Milleseconds Per Frame %f\n", measuredMillsecondsPerFrame); 
+
+    frameTime += measuredSecondsPerFrame;
+    // TODO(sichirc): pass to chatUpdateAndRender
+    unused(frameTime);
+    lastCounter = endOfFrame;
+
+    macosRedrawBuffer(window, &canvas);
   }
 }
 
