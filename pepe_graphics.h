@@ -19,7 +19,7 @@ struct Pepe_Rect {
 
 typedef struct Pepe_Bitmap Pepe_Bitmap;
 struct Pepe_Bitmap {
-  u8 *memory;
+  u8  *memory;
   u32 width;
   u32 height;
   u32 pitch;

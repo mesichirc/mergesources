@@ -44,7 +44,6 @@ Pepe_IO_ReadEntireFileDebug(Pepe_File file)
 
   struct stat fileStat;
   fstat(file.FileDescriptor, &fileStat);
-  printf("filesize = %lld\n", fileStat.st_size);
 
   slice.capacity = fileStat.st_size;
   slice.length = fileStat.st_size;
@@ -63,7 +62,7 @@ Pepe_IO_ReadEntireFileFromPathDebug(const char *path)
   file = Pepe_IO_OpenFile(path, 0);
   slice = Pepe_IO_ReadEntireFileDebug(file);
 
-  // Pepe_IO_CloseFile(file);
+  Pepe_IO_CloseFile(file);
 
   return slice;
 }

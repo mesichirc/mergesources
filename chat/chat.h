@@ -173,5 +173,4 @@ void ChatInputPrint(ChatInput *input);
 
 bool ChatInputKeyPressed(ChatInputHandle input, ChatKeyCode keyCode);
 
-
 void ChatUpdateAndRender(Pepe_Bitmap *canvas, ChatInputHandle input, Pepe_Bitmap *defaultFont);

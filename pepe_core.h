@@ -1,12 +1,13 @@
-#ifndef PEPE_CORE_H
-#define PEPE_CORE_H
-
 #define PEPE_INLINE inline
 
 #define MULTILINE_STR(...) #__VA_ARGS__
 #define PEPE_PACKED_ENUM enum __attribute__((__packed__))
 #define max(A, B) ((A) > (B) ? (A) : (B))
 #define min(A, B) ((A) > (B) ? (B) : (A))
+#define Kilobytes(Bytes) (1024 * (Bytes))
+#define Megabytes(Bytes) (1024 * Kilobytes(Bytes))
+#define Gigabytes(Bytes) (1024 * Megabytes(Bytes))
+
 
 typedef struct Pepe_Slice Pepe_Slice;
 struct Pepe_Slice {
@@ -248,10 +249,10 @@ Pepe_U16SwapBytes(u16 n)
 u32
 Pepe_U32SwapBytes(u32 n)
 {
-  return (u32)((0x000000FF & n) >>  0) |
-         (u32)((0x0000FF00 & n) >>  8) |
-         (u32)((0x00FF0000 & n) >> 16) |
-         (u32)((0xFF000000 & n) >> 24);
+  return (u32)((0x000000FF & n) << 24) |
+         (u32)((0xFF000000 & n) >> 24) |
+         (u32)((0x00FF0000 & n) >>  8) |
+         (u32)((0x0000FF00 & n) <<  8);
 }
 
 u64
@@ -282,7 +283,7 @@ Pepe_UTF8IteratorNext(Pepe_UTF8Iterator *iterator)
   u32 result;
   u8* chars;
   u32 n;
-  chars = iterator->chars + iterator->index;
+  chars = iterator->chars + iterator->indx;
   switch (*chars & 0xf0) {
     case 0xf0 : result = *chars & 0x07; n = 3; break;
     case 0xe0 : result = *chars & 0x0f; n = 2; break;
@@ -300,4 +301,3 @@ Pepe_UTF8IteratorNext(Pepe_UTF8Iterator *iterator)
   return result;
 }
 
-#endif

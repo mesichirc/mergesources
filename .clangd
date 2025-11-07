@@ -1,4 +1,4 @@
 Diagnostics:
   Suppress: '*'
 CompileFlags:
-  Add: [--include-directory=./, -ferror-limit=0]
+  Add: [-I./, -ferror-limit=0]
