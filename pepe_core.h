@@ -1,3 +1,4 @@
+#include "./u.h"
 #define PEPE_INLINE inline
 
 #define MULTILINE_STR(...) #__VA_ARGS__
@@ -210,6 +211,38 @@ Pepe_ArenaResizeAlign(
   (arenaPointer)->currentOffset = 0;        \
 } while(0)
 
+
+/**
+ * Temp Arena usage example
+ * Pepe_TempArenaBegin()
+ * some allocation needed only of function, good replace for
+ * alloca family functions
+ * Pepe_TempArenaEnd()
+ */
+typedef struct Pepe_TempArena Pepe_TempArena;
+struct Pepe_TempArena {
+  Pepe_Arena  *arena;
+  u64         previousOffset;
+  u64         currentOffset;
+};
+
+Pepe_TempArena
+Pepe_TempArenaBegin(Pepe_Arena *arena)
+{
+  Pepe_TempArena temp;
+  temp.arena = arena;
+  temp.previousOffset = arena->previousOffset;
+  temp.currentOffset = arena->currentOffset;
+
+  return temp;
+}
+
+void
+Pepe_TempArenaEnd(Pepe_TempArena temp)
+{
+  temp.arena->previousOffset = temp.previousOffset;
+  temp.arena->currentOffset = temp.currentOffset;
+}
 
 byte
 Pepe_ToLowerCase(byte c)

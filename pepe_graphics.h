@@ -7,7 +7,6 @@ struct Pepe_Color {
   u32 value;
 };
 
-
 typedef struct Pepe_Rect Pepe_Rect;
 struct Pepe_Rect {
   i32 x;
@@ -15,7 +14,6 @@ struct Pepe_Rect {
   u32 w;
   u32 h;
 };
-
 
 typedef struct Pepe_Bitmap Pepe_Bitmap;
 struct Pepe_Bitmap {
@@ -87,6 +85,12 @@ Pepe_ColorUnpack(Pepe_Color color, u8 buf[PEPE_COLOR_COMPS])
   buf[PEPE_COLOR_B] = (u8)((color.value >> 16) & 0xFF);
   buf[PEPE_COLOR_G] = (u8)((color.value >> 8) & 0xFF);
   buf[PEPE_COLOR_R] = (u8)((color.value >> 0) & 0xFF);
+}
+
+u8
+Pepe_ColorGetAlpha(Pepe_Color color)
+{
+  return (u8)((color.value >> 0) & 0xFF);
 }
 
 Pepe_Color 
@@ -203,7 +207,7 @@ Pepe_ClipRect(
   rect->h = bottomRight[1] - origin[1];
 }
 
-inline u32
+u32
 Pepe_AbsoluteValue(i32 v)
 {
   u32 result;
@@ -231,7 +235,7 @@ Pepe_ClipByCanvas(Pepe_Bitmap *canvas, i32 x, i32 y, u32 w, u32 h)
   return rect;
 }
 
-inline u32
+u32
 Pepe_GetPixel(u32 x, u32 y, u32 pitch, u32 scale)
 {
   return (x + y * pitch * scale);

@@ -22,6 +22,7 @@ typedef float	f32;
 typedef double f64;
 
 typedef uintptr_t	uptr;
+typedef size_t usize;
 
 #define unused(x) (void)(x)
 
