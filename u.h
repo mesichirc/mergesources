@@ -23,6 +23,7 @@ typedef double f64;
 
 typedef uintptr_t	uptr;
 
-#define unused(x) (void)(x)
+#define UNUSED(x) (void)(x)
+
 
 #endif
